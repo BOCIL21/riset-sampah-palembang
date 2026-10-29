@@ -239,7 +239,7 @@ PipelineJurnal2().run(input_csv=raw_csv_path)
 
 ---
 
-## 6. Tips Tambahan untuk Menembus Jurnal SINTA 1/2 atau Scopus
+## 6. Tips Tambahan untuk Menembus Jurnal SINTA
 
 1. **Kamus Bahasa Palembang (`config/kamus_palembang.json`):** Terus tambahkan kosakata *slang* Palembang baru yang Anda temukan saat proses *scraping*. Di dalam naskah jurnal, tonjolkan keberadaan kamus normalisasi lokal ini sebagai salah satu kontribusi orisinal (*novelty*).
 2. **Validasi Ahli (Human-in-the-loop):** Ambil sampel sekitar 200–300 baris dari `hasil_analisis_jurnal1.csv`, berikan label manual oleh 2 orang anotator, lalu gunakan modul `EvaluatorJurnal1.evaluate_predictions(label_manusia, label_ai)` di `src/jurnal_1_nlp/evaluator.py` untuk mendapatkan skor **Cohen's Kappa** riil. Reviewer jurnal sangat menyukai validasi ini.
