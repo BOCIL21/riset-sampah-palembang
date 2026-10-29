@@ -28,19 +28,37 @@ class LocationExtractorJurnal2:
             return {}
         return json.loads(self.gazetteer_path.read_text(encoding="utf-8"))
 
+    @staticmethod
+    def _format_place_name(place: str) -> str:
+        """Memformat nama tempat dengan mempertahankan singkatan & angka Romawi tetap kapital."""
+        upper_tokens = {"ii", "iii", "iv", "vi", "km", "tpa", "tps", "psel", "bkb", "jsc", "rs"}
+        words = []
+        for w in place.split():
+            if w.lower() in upper_tokens:
+                words.append(w.upper())
+            else:
+                words.append(w.capitalize())
+        return " ".join(words)
+
     def extract_location(self, text: str) -> Dict[str, object]:
         """
         Mendeteksi entitas lokasi spesifik di Palembang dari kalimat warga.
-        Mengurutkan entitas lokasi yang paling spesifik (frasa terpanjang) lebih dulu.
+        Memprioritaskan entitas spesifik (Pasar, Sungai, TPA, Jalan, Simpang, Taman)
+        dibanding nama Kecamatan umum, kemudian mengurutkan dari frasa terpanjang.
         """
         lower = text.lower()
         matched_locations: List[str] = []
         primary_meta: Optional[Dict[str, object]] = None
 
-        sorted_places = sorted(self.gazetteer.keys(), key=len, reverse=True)
+        def _sort_key(place_key: str) -> tuple:
+            tipe = str(self.gazetteer[place_key].get("tipe", ""))
+            is_specific = 0 if tipe in {"Kecamatan", "Kawasan"} else 1
+            return (is_specific, len(place_key))
+
+        sorted_places = sorted(self.gazetteer.keys(), key=_sort_key, reverse=True)
         for place in sorted_places:
             if place in lower:
-                matched_locations.append(place.title())
+                matched_locations.append(self._format_place_name(place))
                 if primary_meta is None:
                     primary_meta = self.gazetteer[place]
 

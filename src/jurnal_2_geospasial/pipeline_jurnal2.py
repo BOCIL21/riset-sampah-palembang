@@ -29,12 +29,12 @@ class PipelineJurnal2:
             from src.scrapers.viral_palembang_collector import ViralPalembangCollector
 
             if not csv_path.exists():
-                ViralPalembangCollector.save_default_viral_dataset(360)
+                ViralPalembangCollector.save_default_viral_dataset(900)
             else:
                 existing = BaseScraper.load_from_csv(csv_path, anonymize=False)
                 years = {str(r.get("timestamp", ""))[:4] for r in existing}
-                if len(existing) < 360 or years == {"2026"}:
-                    ViralPalembangCollector.save_default_viral_dataset(360)
+                if len(existing) < 900 or years == {"2026"}:
+                    ViralPalembangCollector.save_default_viral_dataset(900)
 
         raw_records = BaseScraper.load_from_csv(csv_path, anonymize=True)
 
@@ -88,6 +88,24 @@ class PipelineJurnal2:
         kawasan_counts = dict(Counter(str(r["tipe_kawasan"]) for r in processed_rows))
         year_counts = dict(Counter(str(r["timestamp"])[:4] for r in processed_rows))
 
+        top_unique_locations: List[Dict[str, object]] = []
+        seen_locs = set()
+        for r in processed_rows:
+            loc_name = str(r["detected_location"])
+            if loc_name not in seen_locs:
+                seen_locs.add(loc_name)
+                top_unique_locations.append(
+                    {
+                        "lokasi": loc_name,
+                        "kecamatan": r["kecamatan"],
+                        "skor_urgensi": r["urgency_score"],
+                        "level": r["urgency_level"],
+                        "rekomendasi": r["recommended_action"],
+                    }
+                )
+            if len(top_unique_locations) >= 5:
+                break
+
         summary_report = {
             "judul_jurnal_2": (
                 "Ekstraksi Entitas Lokasi dan Klasifikasi Tingkat Urgensi Keluhan Sampah "
@@ -98,16 +116,8 @@ class PipelineJurnal2:
             "distribusi_urgensi": urgency_counts,
             "sebaran_kecamatan": kecamatan_counts,
             "sebaran_tipe_kawasan": kawasan_counts,
-            "top_3_prioritas_darurat": [
-                {
-                    "lokasi": r["detected_location"],
-                    "kecamatan": r["kecamatan"],
-                    "skor_urgensi": r["urgency_score"],
-                    "level": r["urgency_level"],
-                    "rekomendasi": r["recommended_action"],
-                }
-                for r in processed_rows[:3]
-            ],
+            "top_3_prioritas_darurat": top_unique_locations[:3],
+            "top_5_prioritas_darurat": top_unique_locations[:5],
             "file_output_csv": str(out_csv),
             "file_peta_interaktif_html": str(out_map),
         }

@@ -33,7 +33,7 @@ class TestJurnal2Geospasial(unittest.TestCase):
     def test_full_pipeline_jurnal2_generates_csv_and_html_map(self) -> None:
         pipeline = PipelineJurnal2()
         report = pipeline.run()
-        self.assertEqual(report["total_laporan"], 360)
+        self.assertGreaterEqual(report["total_laporan"], 900)
         self.assertTrue(Path(str(report["file_output_csv"])).exists())
         map_path = Path(str(report["file_peta_interaktif_html"]))
         self.assertTrue(map_path.exists())

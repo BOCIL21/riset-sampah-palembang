@@ -1,33 +1,31 @@
 {
   "judul_jurnal_1": "Analisis Sentimen dan Pemodelan Topik Keluhan Masyarakat Terkait Pengelolaan Sampah di Kota Palembang Menggunakan IndoBERT dan BERTopic",
-  "total_dokumen": 360,
+  "total_dokumen": 900,
   "distribusi_tahun": {
-    "2026": 70,
-    "2025": 109,
-    "2024": 92,
-    "2023": 83,
-    "2022": 6
+    "2024": 318,
+    "2025": 321,
+    "2026": 261
   },
   "distribusi_sentimen": {
-    "Netral": 109,
-    "Positif": 71,
-    "Negatif": 180
+    "Negatif": 388,
+    "Netral": 259,
+    "Positif": 253
   },
   "distribusi_emosi": {
-    "Harapan_Saran": 109,
-    "Apresiasi": 71,
-    "Marah_Kecewa": 136,
-    "Khawatir_Darurat": 44
+    "Marah_Kecewa": 263,
+    "Khawatir_Darurat": 125,
+    "Harapan_Saran": 259,
+    "Apresiasi": 253
   },
   "distribusi_topik": {
-    "T2_Sungai_Drainase_Banjir": 92,
-    "T3_Keterlambatan_Angkut_DLHK": 86,
-    "T1_Sampah_Pasar_Tradisional": 71,
-    "T4_Kapasitas_TPS_TPA_Overload": 59,
-    "T5_Perilaku_Warga_Dan_Kebijakan": 52
+    "T1_Sampah_Pasar_Tradisional": 242,
+    "T3_Keterlambatan_Angkut_DLHK": 241,
+    "T2_Sungai_Drainase_Banjir": 210,
+    "T5_Perilaku_Warga_Dan_Kebijakan": 117,
+    "T4_Kapasitas_TPS_TPA_Overload": 90
   },
   "metrik_konsistensi": {
-    "total_samples": 360.0,
+    "total_samples": 900.0,
     "accuracy": 1.0,
     "macro_precision": 1.0,
     "macro_recall": 1.0,

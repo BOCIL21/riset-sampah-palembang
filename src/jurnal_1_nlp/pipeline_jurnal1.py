@@ -29,12 +29,12 @@ class PipelineJurnal1:
             from src.scrapers.viral_palembang_collector import ViralPalembangCollector
 
             if not csv_path.exists():
-                ViralPalembangCollector.save_default_viral_dataset(360)
+                ViralPalembangCollector.save_default_viral_dataset(900)
             else:
                 existing = BaseScraper.load_from_csv(csv_path, anonymize=False)
                 years = {str(r.get("timestamp", ""))[:4] for r in existing}
-                if len(existing) < 360 or years == {"2026"}:
-                    ViralPalembangCollector.save_default_viral_dataset(360)
+                if len(existing) < 900 or years == {"2026"}:
+                    ViralPalembangCollector.save_default_viral_dataset(900)
 
         raw_records = BaseScraper.load_from_csv(csv_path, anonymize=True)
 

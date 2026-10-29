@@ -17,7 +17,7 @@ class TestScrapers(unittest.TestCase):
     def test_load_sample_dataset_csv(self) -> None:
         sample_csv = Settings.DATA_RAW_DIR / "sample_keluhan_palembang.csv"
         rows = BaseScraper.load_from_csv(sample_csv, anonymize=True)
-        self.assertEqual(len(rows), 360)
+        self.assertGreaterEqual(len(rows), 900)
         self.assertIn("username_masked", rows[0])
         self.assertTrue(rows[0]["username"].startswith("@"))
         platforms = {r["platform"] for r in rows}

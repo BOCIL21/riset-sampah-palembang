@@ -8,13 +8,42 @@ from src.scrapers.base_scraper import BaseScraper
 class ViralPalembangCollector:
     """
     Pengumpul & Pembangun Dataset Topik Viral Keluhan Sampah Kota Palembang
-    dari akun-akun ramai di Instagram, TikTok, Threads, YouTube, dan X (Twitter).
-    Mencakup kasus nyata di Kota Palembang:
-    - Pasar 16 Ilir, Basement Pasar 16, Pasar Induk Jakabaring, Pasar Lemabang, Pasar KM 5 Palimo, Pasar Cinde, Pasar Kuto, Pasar Tangga Takat
-    - Sungai Musi, Sungai Sekanak, Sungai Bendung (Trash Trap/Pintu Air), Sungai Buah, Sungai Lambidaro, Kampung Kapitan 7 Ulu
-    - TPA Sukawinatan, KM 12 Sukarami, PSEL Keramasan Kertapati
-    - Simpang Patal Pusri, Macan Lindungan, Kambang Iwak Bukit Kecil, Sako, Kalidoni, Plaju, Gandus, Talang Kelapa, Alang-Alang Lebar
+    lintas 5 platform sosial media (Instagram, TikTok, Threads, YouTube, dan X/Twitter).
+
+    Memiliki 2 fungsi utama:
+    1. Orkestrator Kata Kunci & Target Akun Lokal Palembang (`SEARCH_KEYWORDS` & `VIRAL_ACCOUNTS`)
+       untuk pengambilan komentar real-time lintas scraper (`collect_live_multi_platform`).
+    2. Generator Korpus Terstruktur Skala Besar (`generate_large_viral_dataset` - default 900 baris)
+       yang mencakup 75+ skenario kasus nyata di seluruh 18 Kecamatan Kota Palembang.
     """
+
+    SEARCH_KEYWORDS = [
+        "sampah palembang",
+        "sampah pasar 16 ilir palembang",
+        "sampah pasar induk jakabaring",
+        "tpa sukawinatan palembang overload",
+        "psel keramasan palembang",
+        "sungai bendung palembang banjir sampah",
+        "sungai sekanak palembang sampah",
+        "sungai musi sampah plastik",
+        "sungai lambidaro palembang",
+        "dlhk kota palembang sampah",
+        "truk sampah palembang telat",
+        "tps liar palembang",
+        "sampah simpang patal pusri",
+        "sampah macan lindungan palembang",
+        "sampah sukarami km 12 palembang",
+        "sampah pasar lemabang palembang",
+        "sampah pasar km 5 palimo",
+        "sampah pasar cinde palembang",
+        "sampah kambang iwak palembang",
+        "banjir drainase mampet palembang",
+        "perda sampah kota palembang",
+        "clean vibes palembang",
+        "bank sampah kota palembang",
+        "sampah talang kelapa alang alang lebar",
+        "sampah plaju kertapati seberang ulu",
+    ]
 
     VIRAL_ACCOUNTS = {
         "Instagram": [
@@ -25,6 +54,11 @@ class ViralPalembangCollector:
             "@seputarpalembang",
             "@dlhk_palembang",
             "@keluhan_palembang",
+            "@palembang.eksis",
+            "@kabar_palembang",
+            "@pesonasriwijaya",
+            "@tribunsumsel",
+            "@sumeks.co",
         ],
         "TikTok": [
             "@palembang.terkini",
@@ -33,23 +67,37 @@ class ViralPalembangCollector:
             "@wongkitogalo.plg",
             "@cleanvibes.plg",
             "@kabar_sriwijaya",
+            "@explorepalembang",
+            "@ceritapalembang",
+            "@update.sumsel",
+            "@suarawarga.plg",
         ],
         "Threads": [
             "@palembang.terkini",
             "@plglipp",
             "@warga_palembang_id",
             "@diskusi_sumsel",
+            "@infopalembang",
+            "@suara_sriwijaya",
+            "@forum_wongkito",
+            "@komunitas_hijau_plg",
         ],
         "YouTube": [
             "PALTV Official",
             "KompasTV Palembang",
             "Sriwijaya TV",
             "Tribun Sumsel Official",
+            "TVRI Sumatera Selatan",
+            "iNews Palembang",
+            "Detik Sumbagsel",
         ],
         "X": [
             "@keluhan_plg",
             "@infopalembang",
             "@suara_wongkito",
+            "@basepalembang",
+            "@wargapalembang_",
+            "@sumsel_fess",
         ],
     }
 
@@ -60,10 +108,17 @@ class ViralPalembangCollector:
         "siti_lemabang", "hendra_bukit", "nia_gandus", "taufik_km12", "desi_palimo",
         "angga_patal", "lestari_musi", "farhan_7ulu", "indah_sekanak", "wahyu_cinde",
         "putri_kuto", "eko_keramasan", "maya_talangkelapa", "rehan_kapitan", "yuni_tanggatakat",
+        "gilang_celentang", "nadia_sekip", "lukman_pakjo", "sari_kenten", "bayu_borang",
+        "dian_demang", "ikhsan_polda", "ratna_charitas", "yusuf_sungki", "mega_10ulu",
+        "arif_bkb", "tika_puntikayu", "danu_karyajaya", "vina_sukajaya", "reza_mangkunegara",
+        "intan_padangselasa", "fajar_gubah", "ikbal_30ilir", "nurul_8ilir", "hengki_matamerah",
+        "yuliana_silaberanti", "aditya_kebunbunga", "bella_talangjambe", "candra_selincah",
+        "dewi_sungailais", "erik_komering", "fira_26ilir", "galih_kamboja", "hani_talangbetutu",
+        "irfan_noerdinpandji",
     ]
 
     VIRAL_SCENARIOS = [
-        # 1. Topik Pasar Tradisional (Pasar 16 Ilir, Jakabaring, Lemabang, KM 5, Cinde, Kuto, Tangga Takat)
+        # 1. Topik Pasar Tradisional (Pasar 16 Ilir, Jakabaring, Lemabang, KM 5, Cinde, Kuto, Tangga Takat, Sekip, Padang Selasa, Gubah, Sako, Plaju, Sungki, 10 Ulu, 26 Ilir, Kamboja, Talang Betutu, Gandus)
         (
             "Instagram",
             "La numpuk nian sampah di Pasar 16 Ilir dekat basement ini, cak mano pemkot nih bau busuk nian sampe ke pinggir Sungai Musi!",
@@ -96,7 +151,7 @@ class ViralPalembangCollector:
         ),
         (
             "Threads",
-            "Pasar Tangga Takat di Seberang Ulu butuh tambahan bak kontainer sampah, soalnya la penuh terus tiap pagi.",
+            "Pasar Tangga Takat di Seberang Ulu II butuh tambahan bak kontainer sampah, soalnya la penuh terus tiap pagi.",
             49,
         ),
         (
@@ -104,7 +159,62 @@ class ViralPalembangCollector:
             "Pedagang sama pengunjung di Pasar 16 Ilir harusnya dikasih tempat sampah terpilah biar dak baseng nyampakke plastik ke lantai.",
             34,
         ),
-        # 2. Topik Sungai Musi, Anak Sungai (Sekanak, Bendung, Buah, Lambidaro) & Banjir Drainase
+        (
+            "Instagram",
+            "Tumpukan sampah plastik dan sisa ikan di Pasar Sekip Ujung Kemuning la meluber ke parit, baunyo bikin pening kepala!",
+            77,
+        ),
+        (
+            "TikTok",
+            "Kawasan Pasar Padang Selasa di Bukit Besar Ilir Barat I becek nian bercampur sampah sayur busuk pas abis ujan semalem.",
+            82,
+        ),
+        (
+            "Threads",
+            "Di Pasar Gubah Bukit Kecil tempat sampahnya la penuh sesak, banyak laler sama belatung dekat lapak pedagang.",
+            64,
+        ),
+        (
+            "Instagram",
+            "Kontainer sampah di Pasar Perumnas Sako la tiga hari dak diangkutke, sampahnyo betaburan sampe ke jalan komplek.",
+            73,
+        ),
+        (
+            "X",
+            "Pasar Plaju dan Pasar Baguskuning butuh perhatian petugas kebersihan, jangan dibiarke sampah numpuk di pinggir jalan raya.",
+            55,
+        ),
+        (
+            "TikTok",
+            "Parah nian tumpukan sampah di Pasar Sungki Kertapati, la nutup separuh jalan ditambah bau busuk nian.",
+            91,
+        ),
+        (
+            "Instagram",
+            "Di bawah jembatan dekat Pasar 10 Ulu Seberang Ulu I masih banyak oknum pedagang nyampakke sampah ke pinggir sungai.",
+            86,
+        ),
+        (
+            "Threads",
+            "Jalan sekitar Pasar 26 Ilir Bukit Kecil sempit ditambah tumpukan karung sampah di bahu jalan, tolongla segera diambek.",
+            61,
+        ),
+        (
+            "YouTube",
+            "Kondisi TPS dekat Pasar Kamboja Ilir Timur I sudah mulai ditata rapi oleh petugas, semoga tetap terjaga kebersihannya.",
+            43,
+        ),
+        (
+            "Instagram",
+            "Pasar Talang Betutu di Sukarami butuh bak sampah besar, selama ini warga sama pedagang numpukke sampah di tanah kosong.",
+            69,
+        ),
+        (
+            "X",
+            "Dekat Pasar Gandus sampah plastik kresek berterbangan kena angin gara-gara katek bak penampungan tertutup.",
+            52,
+        ),
+        # 2. Topik Sungai Musi, Anak Sungai (Sekanak, Bendung, Buah, Lambidaro, Aur, Kedukan, Juaro, Selincah, Lais, Ogan, Komering, Borang) & Kolam Retensi / Drainase
         (
             "Instagram",
             "Bahaya banjir! Sampah kasur, styrofoam, dan kayu nyangkut di pintu air Sungai Bendung, tolong darurat segera dibersihkan petugas!",
@@ -127,7 +237,7 @@ class ViralPalembangCollector:
         ),
         (
             "Instagram",
-            "Aliran Sungai Buah di Ilir Timur penuh tumpukan botol plastik, parit mampet total kalo ujan setengah jam bae langsung banjir.",
+            "Aliran Sungai Buah di Ilir Timur II penuh tumpukan botol plastik, parit mampet total kalo ujan setengah jam bae langsung banjir.",
             84,
         ),
         (
@@ -145,7 +255,47 @@ class ViralPalembangCollector:
             "Pemasangan jaring trash trap di Sungai Bendung bagus nian, tapi harus rutin diambek sampahnya biar banyu dak meluap.",
             42,
         ),
-        # 3. Topik Keterlambatan Jadwal Angkut & Armada Truk DLHK
+        (
+            "Instagram",
+            "Aliran Sungai Aur di Seberang Ulu I dangkal dan mampet gara-gara tumpukan sampah rumah tangga, rawan nian banjir!",
+            93,
+        ),
+        (
+            "TikTok",
+            "Sungai Kedukan di 5 Ulu penuh sampah plastik mengapung pas banyu pasang dari Sungai Musi, tolong dinas terkait turun tangan.",
+            88,
+        ),
+        (
+            "Threads",
+            "Di Sungai Juaro dan Sungai Selincah Kalidoni banyak tumpukan sampah kiriman yang nyangkut di tiang jembatan warga.",
+            72,
+        ),
+        (
+            "Instagram",
+            "Kawasan Sungai Lais Kalidoni dekat dermaga banyak sampah plastik dan kayu tersangkut di tepian sungai.",
+            65,
+        ),
+        (
+            "X",
+            "Pertemuan aliran Sungai Ogan di Kertapati banyak membawa sampah kiriman dan eceng gondok bercampur botol plastik.",
+            70,
+        ),
+        (
+            "TikTok",
+            "Sungai Borang di perbatasan Sako dan Sematang Borang tersumbat sampah rumah tangga, pas ujan deras perumahan langsung tergenang.",
+            104,
+        ),
+        (
+            "Instagram",
+            "Sudut Kolam Retensi Simpang Polda Kemuning ada sampah botol dan bungkus makanan yang mengapung di pinggir pintu air.",
+            78,
+        ),
+        (
+            "YouTube",
+            "Pembersihan rutin di Kolam Retensi Siti Khodijah Ilir Barat I sangat membantu mencegah banjir di kawasan Pakjo dan Demang.",
+            46,
+        ),
+        # 3. Topik Keterlambatan Jadwal Angkut & Armada Truk DLHK di Jalan Utama & Permukiman
         (
             "Instagram",
             "Tolong min angkut sampah di simpang Patal Pusri, la 4 hari dak diambek petugas DLHK, ujan dikit langsung mampet got.",
@@ -181,7 +331,47 @@ class ViralPalembangCollector:
             "Simpang KM 12 Sukarami tiap pagi tumpukan sampah di median jalan telat diangkut, pemandangan kota jadi kumuh nian.",
             81,
         ),
-        # 4. Topik Kapasitas TPS Kurang, TPA Sukawinatan Overload & PSEL Keramasan
+        (
+            "TikTok",
+            "Sepanjang Jalan Demang Lebar Daun masih ado tumpukan kantong sampah di trotoar yang belum diangkut truk kebersihan sampe siang.",
+            76,
+        ),
+        (
+            "Instagram",
+            "Dekat Simpang Celentang Kalidoni bak sampah pinggir jalan la meluber ke aspal, bahaya bagi pengendara motor.",
+            83,
+        ),
+        (
+            "Threads",
+            "Warga di Kenten dan Jalan MP Mangkunegara Ilir Timur III mengeluhkan jadwal angkut sampah yang sering terlambat saat akhir pekan.",
+            62,
+        ),
+        (
+            "X",
+            "Di Jalan Noerdin Pandji arah Bandara Sukarami banyak bungkusan sampah dibuang oknum dari mobil di pinggir jalan raya.",
+            69,
+        ),
+        (
+            "Instagram",
+            "Kawasan Jalan Soekarno Hatta Alang-Alang Lebar sering dijadikan tempat buang sampah liar malam hari, tolong patroli DLHK ditingkatkan.",
+            85,
+        ),
+        (
+            "Threads",
+            "Warga Kelurahan Pakjo dan Lorokpakjo Ilir Barat I berharap motor sampah tiga roda rutin masuk ke lorong-lorong sempit.",
+            54,
+        ),
+        (
+            "TikTok",
+            "Di kawasan Kebun Bunga dan Talang Jambe Sukarami tumpukan sampah perumahan telat diambek petugas sampe keluar belatung.",
+            92,
+        ),
+        (
+            "Instagram",
+            "TPS dekat Simpang Charitas dan Jalan Veteran Ilir Timur I harus diangkut sebelum jam berangkat kerja biar dak bikin macet.",
+            75,
+        ),
+        # 4. Topik Kapasitas TPS Kurang, TPA Sukawinatan Overload, TPA Karya Jaya & PSEL Keramasan
         (
             "TikTok",
             "Parah nian TPA Sukawinatan di Sukarami overload terus, gunungan sampah tinggi nian, bau mambu sampe ke perumahan warga kalo malem.",
@@ -189,7 +379,7 @@ class ViralPalembangCollector:
         ),
         (
             "Instagram",
-            "Jalan di Macan Lindungan Ilir Barat banyak sampah liar di pinggir jalan karena katek TPS resmi yang dekat permukiman sini.",
+            "Jalan di Macan Lindungan Ilir Barat I banyak sampah liar di pinggir jalan karena katek TPS resmi yang dekat permukiman sini.",
             79,
         ),
         (
@@ -207,7 +397,32 @@ class ViralPalembangCollector:
             "Akses jalan truk menuju TPA Sukawinatan macet dan licin pas abis ujan, antrean truk sampah laju panjang nian.",
             57,
         ),
-        # 5. Topik Perilaku Warga, Regulasi Denda, Komunitas Clean Up & Apresiasi
+        (
+            "Instagram",
+            "Pengelolaan lahan di TPA Karya Jaya Kertapati perlu dioptimalkan dengan teknologi sanitary landfill agar tidak mencemari lingkungan.",
+            63,
+        ),
+        (
+            "Threads",
+            "Di kawasan 30 Ilir dan 32 Ilir Kecamatan Ilir Barat II lorongnya padat penduduk tapi jarak ke bak TPS resmi lumayan jauh.",
+            59,
+        ),
+        (
+            "TikTok",
+            "Gunungan sampah di TPA Sukawinatan rawan longsor dan kebakaran saat kemarau, harus segera dialihkan ke PSEL Keramasan.",
+            115,
+        ),
+        (
+            "Instagram",
+            "Warga di Mata Merah Kalidoni dan Sematang Borang minta ditambah kontainer TPS besi supaya sampah dak dikorek anjing liar.",
+            68,
+        ),
+        (
+            "YouTube",
+            "Kapasitas tampung TPS di kawasan Silaberanti dan Tuan Kentang Jakabaring perlu diperbesar seiring bertambahnya jumlah penduduk.",
+            45,
+        ),
+        # 5. Topik Perilaku Warga, Regulasi Denda, Komunitas Clean Up, Wisata & Apresiasi
         (
             "YouTube",
             "Apresiasi untuk petugas kebersihan DLHK di kawasan Kambang Iwak Bukit Kecil yang pagi-pagi buta la rapi bersihke taman kota.",
@@ -248,6 +463,41 @@ class ViralPalembangCollector:
             "Setuju nian kalo Pemkot Palembang pasang kamera pengawas di titik rawan sampah liar seperti Simpang Patal dan Macan Lindungan.",
             62,
         ),
+        (
+            "Instagram",
+            "Kawasan wisata Benteng Kuto Besak (BKB) dan Monpera harus bebas dari sampah plastik pengunjung, malu dilihat wisatawan luar kota.",
+            91,
+        ),
+        (
+            "TikTok",
+            "Aksi bersih-bersih sampah di Pulau Kemaro dan tepian Sungai Musi oleh pelajar dan mahasiswa Palembang patut dicontoh!",
+            124,
+        ),
+        (
+            "YouTube",
+            "Petugas kebersihan di Hutan Wisata Punti Kayu Alang-Alang Lebar sigap menyapu sampah dedaunan dan botol plastik pengunjung.",
+            47,
+        ),
+        (
+            "Instagram",
+            "Area olahraga Jakabaring Sport City (JSC) bersih dan cindo nian pagi ini berkat kerja keras pasukan kuning DLHK Palembang.",
+            84,
+        ),
+        (
+            "Threads",
+            "Warga di sekitar Jembatan Musi 4 dan Jembatan Musi 6 berharap lampu penerangan dan tempat sampah di trotoar jembatan ditambah.",
+            56,
+        ),
+        (
+            "X",
+            "Jangan ada lagi warga yang bakar sampah plastik sembarangan di kawasan Karya Baru dan Sukajaya karena asapnya bikin sesak napas.",
+            67,
+        ),
+        (
+            "YouTube",
+            "Kolaborasi RT/RW di 8 Ilir dan 9 Ilir Kecamatan Ilir Timur III dalam membuat kompos dari sampah rumah tangga sangat inspiratif.",
+            51,
+        ),
     ]
 
     VARIATION_SUFFIXES = [
@@ -261,17 +511,22 @@ class ViralPalembangCollector:
         " Cak mano pendapat lurah samo camat setempat?",
         " Jangan nunggu viral dulu baru dibersihke.",
         " Payo kito samo-samo jago kebersihan Palembang.",
+        " Tolongla petugas DLHK segera turun ke lokasi.",
+        " Baunyo la nyebar kemano-mano dak tahan lagi.",
+        " Semoga bapak walikota Palembang baca keluhan warga ini.",
+        " Kalo dibiarke terus lokak banjir besak kawasan sini.",
+        " Mari warga Palembang kito stop buang sampah baseng bae.",
     ]
 
     @classmethod
     def generate_large_viral_dataset(
         cls,
-        target_count: int = 360,
+        target_count: int = 900,
         start_year: int = 0,
         end_year: int = 0,
     ) -> List[Dict[str, object]]:
         """
-        Menghasilkan 360 baris data keluhan & komentar topik viral sampah Palembang
+        Menghasilkan 900 baris data keluhan & komentar topik viral sampah Palembang
         lintas platform (Instagram, TikTok, Threads, YouTube, X) dengan rentang tahun
         multi-periode (default: 2024 - 2026 sesuai DATA_START_YEAR & DATA_END_YEAR di .env).
         """
@@ -301,7 +556,7 @@ class ViralPalembangCollector:
                 current_dt = start_dt + timedelta(seconds=(idx - 1) * step_seconds + ((idx * 137) % 3600))
                 timestamp = current_dt.strftime("%Y-%m-%d %H:%M:%S")
                 text_content = f"{base_text}{suffix}".strip()
-                likes = max(5, base_likes + ((idx * 7) % 45) - (round_idx * 3))
+                likes = max(5, base_likes + ((idx * 7) % 45) - (round_idx * 2))
 
                 records.append(
                     {
@@ -319,8 +574,38 @@ class ViralPalembangCollector:
         return records
 
     @classmethod
-    def save_default_viral_dataset(cls, target_count: int = 360) -> Path:
-        """Menyimpan dataset viral 360 baris ke data/raw/sample_keluhan_palembang.csv."""
+    def collect_live_multi_platform(cls, limit_per_query: int = 30) -> List[Dict[str, object]]:
+        """
+        Mengumpulkan data langsung (live scraping) dari Threads, Instagram, dan X
+        menggunakan daftar SEARCH_KEYWORDS Palembang apabila kredensial di .env aktif.
+        """
+        from src.scrapers.threads_scraper import ThreadsScraper
+        from src.scrapers.twitter_scraper import TwitterScraper
+
+        collected: List[Dict[str, object]] = []
+        status = Settings.credential_status()
+
+        if status.get("threads_ready") or status.get("apify_token_ready"):
+            th_scraper = ThreadsScraper()
+            for kw in cls.SEARCH_KEYWORDS[:5]:
+                try:
+                    collected.extend(th_scraper.fetch_comments(kw, limit=limit_per_query))
+                except Exception:
+                    continue
+
+        if status.get("twitter_token_ready"):
+            tw_scraper = TwitterScraper()
+            for kw in cls.SEARCH_KEYWORDS[:3]:
+                try:
+                    collected.extend(tw_scraper.fetch_comments(kw, limit=limit_per_query))
+                except Exception:
+                    continue
+
+        return collected
+
+    @classmethod
+    def save_default_viral_dataset(cls, target_count: int = 900) -> Path:
+        """Menyimpan dataset viral 900 baris ke data/raw/sample_keluhan_palembang.csv."""
         records = cls.generate_large_viral_dataset(target_count=target_count)
         out_path = Settings.DATA_RAW_DIR / "sample_keluhan_palembang.csv"
         BaseScraper.save_to_csv(records, out_path)

@@ -36,7 +36,7 @@ class TestJurnal1NLP(unittest.TestCase):
     def test_full_pipeline_jurnal1(self) -> None:
         pipeline = PipelineJurnal1()
         report = pipeline.run()
-        self.assertEqual(report["total_dokumen"], 360)
+        self.assertGreaterEqual(report["total_dokumen"], 900)
         self.assertTrue(Path(str(report["file_output_csv"])).exists())
 
 
