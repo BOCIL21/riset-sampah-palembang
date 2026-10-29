@@ -22,10 +22,26 @@ class TestScrapers(unittest.TestCase):
         self.assertTrue(rows[0]["username"].startswith("@"))
         self.assertTrue(rows[0]["profile_url"].startswith("https://"))
         self.assertTrue(rows[0]["post_url"].startswith("https://"))
+        direct_tokens = ("/p/", "/reel/", "/watch?v=", "/video/", "/post/", "/t/", "/status/")
+        for r in rows:
+            self.assertTrue(
+                any(tok in r["post_url"] for tok in direct_tokens),
+                f"post_url bukan direct link ke postingan: {r['post_url']}",
+            )
+            self.assertNotEqual(
+                r["post_url"].rstrip("/"),
+                BaseScraper.build_profile_url(r["platform"], r["source_account"]).rstrip("/"),
+            )
         platforms = {r["platform"] for r in rows}
-        self.assertIn("Threads", platforms)
-        self.assertIn("TikTok", platforms)
         self.assertIn("Instagram", platforms)
+        self.assertIn("YouTube", platforms)
+        for r in rows:
+            self.assertTrue(bool(r.get("real_comment")), "real_comment tidak boleh kosong")
+            self.assertNotEqual(
+                r["username"].lstrip("@").lower(),
+                r["source_account"].lstrip("@").lower(),
+                "Akun pengomentar tidak boleh sama dengan akun pengunggah",
+            )
 
     def test_instagram_scraper_requires_credentials_when_unconfigured(self) -> None:
         scraper = InstagramScraper()

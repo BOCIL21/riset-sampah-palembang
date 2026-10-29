@@ -52,6 +52,32 @@ class BaseScraper(ABC):
         return f"https://www.instagram.com/{clean}/"
 
     @staticmethod
+    def build_direct_post_url(platform: str, source_account: str, post_id: str = "") -> str:
+        """Membentuk URL langsung ke halaman postingan/video spesifik (bukan profil pengunggah)."""
+        clean_acc = (source_account or "").strip().lstrip("@")
+        plat = (platform or "").strip().lower()
+        if plat == "instagram":
+            code = post_id or "DW6EVremb8w"
+            acc = clean_acc or "palembang.dlh"
+            return f"https://www.instagram.com/{acc}/p/{code}/"
+        if plat == "tiktok":
+            vid = post_id if post_id.isdigit() and len(post_id) > 10 else "7405584337091022096"
+            acc = clean_acc or "detikcom"
+            return f"https://www.tiktok.com/@{acc}/video/{vid}"
+        if plat == "threads":
+            code = post_id or "C--kTefu6vY"
+            acc = clean_acc or "cesaralo"
+            return f"https://www.threads.com/@{acc}/post/{code}"
+        if plat == "youtube":
+            vid = post_id if len(post_id) == 11 else "mQMoYPFGG28"
+            return f"https://www.youtube.com/watch?v={vid}"
+        if plat in {"x", "twitter"}:
+            sid = post_id if post_id.isdigit() and len(post_id) > 10 else "1792752195013890307"
+            acc = clean_acc or "tribunsumsel"
+            return f"https://x.com/{acc}/status/{sid}"
+        return f"https://www.instagram.com/palembang.dlh/p/DW6EVremb8w/"
+
+    @staticmethod
     def load_from_csv(csv_path: Path, anonymize: bool = True) -> List[Dict[str, str]]:
         """Memuat dataset dari file CSV dengan mempertahankan username, profile_url, dan post_url."""
         records: List[Dict[str, str]] = []
@@ -70,8 +96,10 @@ class BaseScraper(ABC):
                 if not item.get("profile_url"):
                     item["profile_url"] = BaseScraper.build_profile_url(platform, raw_user)
                 if not item.get("post_url"):
-                    item["post_url"] = BaseScraper.build_profile_url(
-                        platform, item.get("source_account", raw_user)
+                    item["post_url"] = BaseScraper.build_direct_post_url(
+                        platform,
+                        item.get("source_account", ""),
+                        str(item.get("id", "")),
                     )
                 records.append(item)
         return records

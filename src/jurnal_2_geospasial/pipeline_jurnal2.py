@@ -33,8 +33,8 @@ class PipelineJurnal2:
             else:
                 existing = BaseScraper.load_from_csv(csv_path, anonymize=False)
                 years = {str(r.get("timestamp", ""))[:4] for r in existing}
-                has_real_post_url = bool(existing and "/p/" in str(existing[0].get("post_url", "")))
-                if len(existing) < 900 or years == {"2026"} or not has_real_post_url:
+                has_real_comment = bool(existing and "real_comment" in existing[0] and existing[0].get("real_comment"))
+                if len(existing) < 900 or years == {"2026"} or not has_real_comment:
                     ViralPalembangCollector.save_default_viral_dataset(900)
 
         raw_records = BaseScraper.load_from_csv(csv_path, anonymize=True)
@@ -72,6 +72,7 @@ class PipelineJurnal2:
                     "sla_target": urg_info["sla_target"],
                     "risk_factors": urg_info.get("risk_factors", ""),
                     "recommended_action": urg_info["recommended_action"],
+                    "real_comment": row.get("real_comment", ""),
                     "profile_url": row.get("profile_url", ""),
                     "post_url": row.get("post_url", ""),
                 }

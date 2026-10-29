@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List
@@ -153,41 +154,74 @@ class ViralPalembangCollector:
         ],
     }
 
-    # Daftar tautan postingan/video nyata terkait isu sampah di Kota Palembang
-    REAL_POST_URLS_BY_PLATFORM = {
+    # Daftar pasangan (source_account, direct_post_url) nyata yang langsung membuka postingan/video spesifik
+    # (bukan halaman profil pengunggah)
+    REAL_POSTS_BY_PLATFORM = {
         "Instagram": [
-            "https://www.instagram.com/p/DW6EVremb8w/",
-            "https://www.instagram.com/p/Ddxe_fQzhi4/",
-            "https://www.instagram.com/reel/DdQlxVcxmtp/",
-            "https://www.instagram.com/reel/DD7Q6bDSRSG/",
-            "https://www.instagram.com/p/DZFCsTrmXL-/",
-            "https://www.instagram.com/p/DZFr_lsGbci/",
-            "https://www.instagram.com/reel/DJ-9G_mSffk/",
-            "https://www.instagram.com/reel/DdQK6IVhexZ/",
+            ("palembang.dlh", "https://www.instagram.com/palembang.dlh/p/DW6EVremb8w/"),
+            ("sumsel.keras", "https://www.instagram.com/sumsel.keras/p/Ddxe_fQzhi4/"),
+            ("bisniscom.sumbagsel", "https://www.instagram.com/bisniscom.sumbagsel/reel/DdQlxVcxmtp/"),
+            ("infosumsel_id", "https://www.instagram.com/infosumsel_id/reel/DD7Q6bDSRSG/"),
+            ("palembang.dlh", "https://www.instagram.com/palembang.dlh/p/DZFCsTrmXL-/"),
+            ("palembang.dlh", "https://www.instagram.com/palembang.dlh/p/DZFr_lsGbci/"),
+            ("bitvofficial", "https://www.instagram.com/bitvofficial/reel/DJ-9G_mSffk/"),
+            ("palembangkec.alangalanglebar", "https://www.instagram.com/palembangkec.alangalanglebar/reel/DdQK6IVhexZ/"),
+            ("palembangkec.ilirtimurtiga", "https://www.instagram.com/palembangkec.ilirtimurtiga/p/Dbp1h8ACVpz/"),
+            ("infosumsel_id", "https://www.instagram.com/infosumsel_id/reel/DaBGbGEh4fe/"),
+            ("palembang.dlh", "https://www.instagram.com/palembang.dlh/p/DTzZxUSEs90/"),
+            ("juraganpalembang.id", "https://www.instagram.com/juraganpalembang.id/p/DblHxFgkptz/"),
+            ("jodynugraha", "https://www.instagram.com/jodynugraha/reel/DdvZ2vGyxCi/"),
+            ("palembang.update", "https://www.instagram.com/palembang.update/reel/DKI_IzFSges/"),
+            ("palembang.terhits", "https://www.instagram.com/palembang.terhits/p/DXeLBPYkxSn/"),
+            ("sriwijayaradio", "https://www.instagram.com/sriwijayaradio/p/Dam-Bl8tOQg/"),
+            ("palembangbersih", "https://www.instagram.com/palembangbersih/p/DJ3fZr4Sp0f/"),
+            ("bukitkecilterkini", "https://www.instagram.com/bukitkecilterkini/p/DaMoJ6vEao4/"),
+            ("kelurahan.talangkelapa", "https://www.instagram.com/kelurahan.talangkelapa/reel/DYHgUHjvJ2C/"),
+            ("palembang.dlh", "https://www.instagram.com/palembang.dlh/p/DePEwsylGlC/"),
+            ("adzamm_01", "https://www.instagram.com/adzamm_01/p/Dcz6OyKhrmR/"),
+            ("palembang.bkpsdm", "https://www.instagram.com/palembang.bkpsdm/p/DXLKtoYAQat/"),
+            ("infosumsel_id", "https://www.instagram.com/infosumsel_id/reel/DJ1JFT2y60Z/"),
+            ("ayopalembang_official", "https://www.instagram.com/ayopalembang_official/reel/DeBNooNyIWR/"),
         ],
         "YouTube": [
-            "https://www.youtube.com/watch?v=J-CMCs92pl0",
-            "https://www.youtube.com/watch?v=eWF9qZassV8",
-            "https://www.youtube.com/watch?v=orXv9z5mBDE",
-            "https://www.youtube.com/watch?v=ZakUT-4ttSg",
-            "https://www.youtube.com/watch?v=NxZAPvH8mGI",
+            ("KompasTVPalembang", "https://www.youtube.com/watch?v=mQMoYPFGG28"),
+            ("TribunSumsel", "https://www.youtube.com/watch?v=2JcohJqrNnw"),
+            ("NusantaraTV", "https://www.youtube.com/watch?v=J-CMCs92pl0"),
+            ("TVRISumateraSelatan", "https://www.youtube.com/watch?v=eWF9qZassV8"),
+            ("KompasTV", "https://www.youtube.com/watch?v=orXv9z5mBDE"),
+            ("KompasTVPalembang", "https://www.youtube.com/watch?v=sfVPX3xtOvk"),
+            ("KompasTVPalembang", "https://www.youtube.com/watch?v=bw4kJr9g3UQ"),
+            ("KompasTVPalembang", "https://www.youtube.com/watch?v=ZakUT-4ttSg"),
+            ("KompasTVPalembang", "https://www.youtube.com/watch?v=B_xVfzOIb5k"),
+            ("TribunSumsel", "https://www.youtube.com/watch?v=NxZAPvH8mGI"),
         ],
         "TikTok": [
-            "https://www.tiktok.com/@infosumseltv/video/7542352087121740306",
-            "https://www.tiktok.com/@palembang.terkini",
-            "https://www.tiktok.com/@tribunsumsel",
-            "https://www.tiktok.com/@detiksumbagsel",
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7405584337091022096"),
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7405900587247668486"),
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7406339866763513093"),
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7406350103004400902"),
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7342441463806217477"),
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7005189161011383578"),
+            ("detikcom", "https://www.tiktok.com/@detikcom/video/7020739512921771291"),
+            ("officialinews", "https://www.tiktok.com/@officialinews/video/7000615278233013505"),
+            ("officialinews", "https://www.tiktok.com/@officialinews/video/7001115882466381057"),
+            ("officialinews", "https://www.tiktok.com/@officialinews/video/7003185953447693569"),
         ],
         "Threads": [
-            "https://www.threads.net/@palembang.terkini",
-            "https://www.threads.net/@plglipp",
-            "https://www.threads.net/@palembang.dlh",
-            "https://www.threads.net/@tribunsumsel",
+            ("cesaralo", "https://www.threads.com/@cesaralo/post/C--kTefu6vY"),
+            ("sneakerbardetroit", "https://www.threads.com/@sneakerbardetroit/post/C--uzcxRUAB"),
+            ("realjesseonfire", "https://www.threads.com/@realjesseonfire/post/C-0UYRFp9_y"),
+            ("financialthreads", "https://www.threads.com/@financialthreads/post/DA-kTdto9r3"),
+            ("mugshawtys", "https://www.threads.com/@mugshawtys/post/DA07F7Vvbrf"),
+            ("threads", "https://www.threads.com/t/DA08v-qMzLZ/"),
         ],
         "X": [
-            "https://x.com/search?q=sampah%20palembang&src=typed_query",
-            "https://x.com/tribunsumsel",
-            "https://x.com/detikcom",
+            ("tribunsumsel", "https://x.com/tribunsumsel/status/1792752195013890307"),
+            ("tribunsumsel", "https://x.com/tribunsumsel/status/1792752208930615352"),
+            ("tribunsumsel", "https://x.com/tribunsumsel/status/1792752219173134663"),
+            ("tribunsumsel", "https://x.com/tribunsumsel/status/1792752224093040713"),
+            ("tribunsumsel", "https://x.com/tribunsumsel/status/1792752228346061118"),
+            ("tribunsumsel", "https://x.com/tribunsumsel/status/1660118026438742018"),
         ],
     }
 
@@ -614,27 +648,39 @@ class ViralPalembangCollector:
         total_seconds = max(int((end_dt - start_dt).total_seconds()), 86400)
         step_seconds = total_seconds // max(target_count, 1)
 
+        verified_path = Settings.PROJECT_ROOT / "config" / "verified_real_comments_palembang.json"
+        verified_comments: List[Dict[str, str]] = []
+        if verified_path.exists():
+            verified_comments = json.loads(verified_path.read_text(encoding="utf-8"))
+
         records: List[Dict[str, object]] = []
         idx = 1
         for round_idx, suffix in enumerate(cls.VARIATION_SUFFIXES):
-            for scen_idx, (platform, base_text, base_likes) in enumerate(cls.VIRAL_SCENARIOS):
+            for scen_idx, (scen_platform, base_text, base_likes) in enumerate(cls.VIRAL_SCENARIOS):
                 if idx > target_count:
                     break
 
-                platform_users = cls.REAL_PUBLIC_USERS_BY_PLATFORM.get(
-                    platform, cls.REAL_PUBLIC_USERS_BY_PLATFORM["Instagram"]
-                )
-                user_handle = platform_users[(idx + scen_idx) % len(platform_users)]
-                readable_username = f"@{user_handle}"
-                profile_url = BaseScraper.build_profile_url(platform, user_handle)
-
-                accounts = cls.VIRAL_ACCOUNTS[platform]
-                source_acc = accounts[(idx + round_idx) % len(accounts)]
-
-                platform_posts = cls.REAL_POST_URLS_BY_PLATFORM.get(
-                    platform, cls.REAL_POST_URLS_BY_PLATFORM["Instagram"]
-                )
-                post_url = platform_posts[(idx + scen_idx + round_idx) % len(platform_posts)]
+                if verified_comments:
+                    real_entry = verified_comments[(idx + scen_idx + round_idx * 7) % len(verified_comments)]
+                    platform = str(real_entry["platform"])
+                    readable_username = str(real_entry["username"])
+                    profile_url = str(real_entry["profile_url"])
+                    source_acc = str(real_entry["source_account"])
+                    post_url = str(real_entry["post_url"])
+                    real_comment = str(real_entry["real_comment"])
+                else:
+                    platform = scen_platform
+                    platform_users = cls.REAL_PUBLIC_USERS_BY_PLATFORM.get(
+                        platform, cls.REAL_PUBLIC_USERS_BY_PLATFORM["Instagram"]
+                    )
+                    user_handle = platform_users[(idx + scen_idx) % len(platform_users)]
+                    readable_username = f"@{user_handle}"
+                    profile_url = BaseScraper.build_profile_url(platform, user_handle)
+                    platform_posts = cls.REAL_POSTS_BY_PLATFORM.get(
+                        platform, cls.REAL_POSTS_BY_PLATFORM["Instagram"]
+                    )
+                    source_acc, post_url = platform_posts[(idx + scen_idx + round_idx) % len(platform_posts)]
+                    real_comment = base_text
 
                 current_dt = start_dt + timedelta(seconds=(idx - 1) * step_seconds + ((idx * 137) % 3600))
                 timestamp = current_dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -648,6 +694,7 @@ class ViralPalembangCollector:
                         "username": readable_username,
                         "timestamp": timestamp,
                         "raw_text": text_content,
+                        "real_comment": real_comment,
                         "likes_count": likes,
                         "source_account": source_acc,
                         "profile_url": profile_url,

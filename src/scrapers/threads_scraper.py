@@ -61,11 +61,7 @@ class ThreadsScraper(BaseScraper):
             post_url = (
                 str(item.get("url"))
                 if item.get("url")
-                else (
-                    f"https://www.threads.net/@{author.lstrip('@')}/post/{post_code}"
-                    if post_code
-                    else f"https://www.threads.net/@{author.lstrip('@')}"
-                )
+                else self.build_direct_post_url("Threads", author, post_code)
             )
             results.append(
                 {
