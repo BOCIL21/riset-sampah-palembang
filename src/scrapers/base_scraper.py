@@ -30,13 +30,30 @@ class BaseScraper(ABC):
     def format_readable_username(username: str) -> str:
         """Memastikan username diawali simbol '@' agar rapi dan mudah dibaca di tabel CSV."""
         if not username:
-            return "@warga_palembang"
+            return "@palembang.terkini"
         clean = username.strip().lstrip("@")
         return f"@{clean}"
 
     @staticmethod
+    def build_profile_url(platform: str, username: str) -> str:
+        """Membentuk URL langsung ke profil akun media sosial berdasarkan platform dan username."""
+        clean = (username or "").strip().lstrip("@")
+        plat = (platform or "").strip().lower()
+        if plat == "instagram":
+            return f"https://www.instagram.com/{clean}/"
+        if plat == "tiktok":
+            return f"https://www.tiktok.com/@{clean}"
+        if plat == "threads":
+            return f"https://www.threads.net/@{clean}"
+        if plat == "youtube":
+            return f"https://www.youtube.com/@{clean.replace(' ', '')}"
+        if plat in {"x", "twitter"}:
+            return f"https://x.com/{clean}"
+        return f"https://www.instagram.com/{clean}/"
+
+    @staticmethod
     def load_from_csv(csv_path: Path, anonymize: bool = True) -> List[Dict[str, str]]:
-        """Memuat dataset dari file CSV dengan mempertahankan username asli yang mudah dibaca."""
+        """Memuat dataset dari file CSV dengan mempertahankan username, profile_url, dan post_url."""
         records: List[Dict[str, str]] = []
         if not csv_path.exists():
             raise FileNotFoundError(f"File dataset tidak ditemukan: {csv_path}")
@@ -46,9 +63,16 @@ class BaseScraper(ABC):
             for row in reader:
                 item = dict(row)
                 raw_user = item.get("username", "")
+                platform = item.get("platform", "Instagram")
                 item["username"] = BaseScraper.format_readable_username(raw_user)
                 if anonymize:
                     item["username_masked"] = BaseScraper.anonymize_username(raw_user)
+                if not item.get("profile_url"):
+                    item["profile_url"] = BaseScraper.build_profile_url(platform, raw_user)
+                if not item.get("post_url"):
+                    item["post_url"] = BaseScraper.build_profile_url(
+                        platform, item.get("source_account", raw_user)
+                    )
                 records.append(item)
         return records
 

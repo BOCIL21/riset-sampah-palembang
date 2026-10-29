@@ -32,17 +32,25 @@ class YouTubeScraper(BaseScraper):
         response = request.execute()
 
         results: List[Dict[str, object]] = []
+        post_url = f"https://www.youtube.com/watch?v={video_id}"
         for idx, item in enumerate(response.get("items", []), start=1):
             snippet = item["snippet"]["topLevelComment"]["snippet"]
+            author_name = str(snippet.get("authorDisplayName", "warga_palembang")).lstrip("@")
+            author_url = str(
+                snippet.get("authorChannelUrl") or self.build_profile_url("YouTube", author_name)
+            )
+            comment_id = str(item.get("id", idx))
             results.append(
                 {
-                    "id": str(item.get("id", idx)),
+                    "id": comment_id,
                     "platform": "YouTube",
-                    "username": self.anonymize_username(snippet.get("authorDisplayName", "anon")),
+                    "username": self.format_readable_username(author_name),
                     "timestamp": snippet.get("publishedAt", ""),
                     "raw_text": snippet.get("textDisplay", ""),
                     "likes_count": int(snippet.get("likeCount", 0)),
                     "source_account": video_id,
+                    "profile_url": author_url,
+                    "post_url": f"{post_url}&lc={comment_id}",
                 }
             )
         return results

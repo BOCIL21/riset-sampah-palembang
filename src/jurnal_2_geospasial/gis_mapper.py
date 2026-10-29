@@ -54,6 +54,8 @@ class GISMapperJurnal2:
                     "sla": str(row.get("sla_target", "")),
                     "keluhan": str(row.get("normalized_text", "")),
                     "tindakan": str(row.get("recommended_action", "")),
+                    "profile_url": str(row.get("profile_url", "")),
+                    "post_url": str(row.get("post_url", "")),
                 }
             )
 
@@ -140,10 +142,10 @@ class GISMapperJurnal2:
                         fillOpacity: 0.82
                     }}).addTo(map);
 
-                    var popupHtml = "<div style='min-width:250px;font-size:13px;color:#0f172a;'>" +
+                    var popupHtml = "<div style='min-width:265px;font-size:13px;color:#0f172a;'>" +
                                "<b>Lokasi:</b> " + info.lokasi + " (" + info.kecamatan + ")<br>" +
-                               "<b>Sumber:</b> " + info.platform + " | <b>Akun:</b> " + info.username + "<br>" +
-                               "<b>Waktu:</b> " + info.tanggal + "<br>" +
+                               "<b>Sumber:</b> " + info.platform + " | <b>Akun:</b> <a href='" + info.profile_url + "' target='_blank' rel='noopener noreferrer'>" + info.username + "</a><br>" +
+                               "<b>Waktu:</b> " + info.tanggal + " | <a href='" + info.post_url + "' target='_blank' rel='noopener noreferrer'><b>Lihat Postingan</b></a><br>" +
                                "<b>Tingkat Urgensi:</b> <span style='color:" + info.color + ";font-weight:bold;'>" + info.urgensi + "</span><br>" +
                                "<b>Target SLA:</b> " + info.sla + "<br><hr style='margin:6px 0;'>" +
                                "<b>Keluhan Warga:</b> <i>&quot;" + info.keluhan + "&quot;</i><br><br>" +

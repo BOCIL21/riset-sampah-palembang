@@ -20,6 +20,8 @@ class TestScrapers(unittest.TestCase):
         self.assertGreaterEqual(len(rows), 900)
         self.assertIn("username_masked", rows[0])
         self.assertTrue(rows[0]["username"].startswith("@"))
+        self.assertTrue(rows[0]["profile_url"].startswith("https://"))
+        self.assertTrue(rows[0]["post_url"].startswith("https://"))
         platforms = {r["platform"] for r in rows}
         self.assertIn("Threads", platforms)
         self.assertIn("TikTok", platforms)

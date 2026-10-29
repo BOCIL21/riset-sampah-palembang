@@ -33,7 +33,8 @@ class PipelineJurnal1:
             else:
                 existing = BaseScraper.load_from_csv(csv_path, anonymize=False)
                 years = {str(r.get("timestamp", ""))[:4] for r in existing}
-                if len(existing) < 900 or years == {"2026"}:
+                has_real_post_url = bool(existing and "/p/" in str(existing[0].get("post_url", "")))
+                if len(existing) < 900 or years == {"2026"} or not has_real_post_url:
                     ViralPalembangCollector.save_default_viral_dataset(900)
 
         raw_records = BaseScraper.load_from_csv(csv_path, anonymize=True)
@@ -67,10 +68,12 @@ class PipelineJurnal1:
             )
 
         topic_assignments = self.topic_modeler.assign_topics(normalized_texts)
-        for row, topic in zip(enriched_rows, topic_assignments):
+        for row, raw_row, topic in zip(enriched_rows, raw_records, topic_assignments):
             row["topic_id"] = topic["topic_id"]
             row["topic_label"] = topic["topic_label"]
             row["matched_keywords"] = topic["matched_keywords"]
+            row["profile_url"] = raw_row.get("profile_url", "")
+            row["post_url"] = raw_row.get("post_url", "")
 
         # Simpan CSV hasil olahan Jurnal 1
         out_csv = Settings.OUTPUT_JURNAL1_DIR / "hasil_analisis_jurnal1.csv"

@@ -40,18 +40,22 @@ class InstagramScraper(BaseScraper):
         post = instaloader.Post.from_shortcode(loader.context, post_shortcode)
 
         results: List[Dict[str, object]] = []
+        post_url = f"https://www.instagram.com/p/{post_shortcode}/"
         for idx, comment in enumerate(post.get_comments(), start=1):
             if idx > limit:
                 break
+            owner_user = str(comment.owner.username)
             results.append(
                 {
                     "id": str(comment.id),
                     "platform": "Instagram",
-                    "username": self.anonymize_username(comment.owner.username),
+                    "username": self.format_readable_username(owner_user),
                     "timestamp": comment.created_at_utc.strftime("%Y-%m-%d %H:%M:%S"),
                     "raw_text": comment.text,
                     "likes_count": comment.likes_count,
                     "source_account": f"@{post.owner_username}",
+                    "profile_url": self.build_profile_url("Instagram", owner_user),
+                    "post_url": post_url,
                 }
             )
         return results
@@ -60,8 +64,9 @@ class InstagramScraper(BaseScraper):
         from apify_client import ApifyClient  # type: ignore
 
         client = ApifyClient(self.apify_token)
+        post_url = f"https://www.instagram.com/p/{post_shortcode}/"
         run_input = {
-            "directUrls": [f"https://www.instagram.com/p/{post_shortcode}/"],
+            "directUrls": [post_url],
             "resultsLimit": limit,
         }
         run = client.actor("apify/instagram-comment-scraper").call(run_input=run_input)
@@ -69,15 +74,18 @@ class InstagramScraper(BaseScraper):
 
         results: List[Dict[str, object]] = []
         for idx, item in enumerate(dataset_items, start=1):
+            owner_user = str(item.get("ownerUsername", "palembang.terkini"))
             results.append(
                 {
                     "id": str(item.get("id", idx)),
                     "platform": "Instagram",
-                    "username": self.anonymize_username(str(item.get("ownerUsername", "anon"))),
+                    "username": self.format_readable_username(owner_user),
                     "timestamp": str(item.get("timestamp", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))),
                     "raw_text": str(item.get("text", "")),
                     "likes_count": int(item.get("likesCount", 0)),
                     "source_account": post_shortcode,
+                    "profile_url": self.build_profile_url("Instagram", owner_user),
+                    "post_url": str(item.get("postUrl") or post_url),
                 }
             )
         return results

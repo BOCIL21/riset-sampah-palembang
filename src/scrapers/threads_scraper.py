@@ -56,16 +56,28 @@ class ThreadsScraper(BaseScraper):
 
         results: List[Dict[str, object]] = []
         for idx, item in enumerate(dataset_items, start=1):
-            author = str(item.get("username") or item.get("ownerUsername") or "anon")
+            author = str(item.get("username") or item.get("ownerUsername") or "palembang.terkini")
+            post_code = str(item.get("code") or item.get("id") or "")
+            post_url = (
+                str(item.get("url"))
+                if item.get("url")
+                else (
+                    f"https://www.threads.net/@{author.lstrip('@')}/post/{post_code}"
+                    if post_code
+                    else f"https://www.threads.net/@{author.lstrip('@')}"
+                )
+            )
             results.append(
                 {
                     "id": str(item.get("id", f"th_{idx}")),
                     "platform": "Threads",
-                    "username": self.anonymize_username(author),
+                    "username": self.format_readable_username(author),
                     "timestamp": str(item.get("publishedAt", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))),
                     "raw_text": str(item.get("text", "")),
                     "likes_count": int(item.get("likeCount", 0)),
-                    "source_account": f"@{author}",
+                    "source_account": f"@{author.lstrip('@')}",
+                    "profile_url": self.build_profile_url("Threads", author),
+                    "post_url": post_url,
                 }
             )
         return results

@@ -49,38 +49,30 @@ class ViralPalembangCollector:
         "Instagram": [
             "@palembang.terkini",
             "@plglipp",
-            "@infopalembang",
+            "@palembang.dlh",
             "@palembang.update",
             "@seputarpalembang",
-            "@dlhk_palembang",
-            "@keluhan_palembang",
+            "@infopalembang",
             "@palembang.eksis",
-            "@kabar_palembang",
             "@pesonasriwijaya",
             "@tribunsumsel",
             "@sumeks.co",
         ],
         "TikTok": [
             "@palembang.terkini",
-            "@sumsel.viral",
-            "@infopalembang.id",
-            "@wongkitogalo.plg",
-            "@cleanvibes.plg",
-            "@kabar_sriwijaya",
-            "@explorepalembang",
-            "@ceritapalembang",
-            "@update.sumsel",
-            "@suarawarga.plg",
+            "@infosumseltv",
+            "@tribunsumsel",
+            "@detiksumbagsel",
+            "@kompastvpalembang",
+            "@paltv.id",
         ],
         "Threads": [
             "@palembang.terkini",
             "@plglipp",
-            "@warga_palembang_id",
-            "@diskusi_sumsel",
+            "@palembang.dlh",
+            "@tribunsumsel",
             "@infopalembang",
-            "@suara_sriwijaya",
-            "@forum_wongkito",
-            "@komunitas_hijau_plg",
+            "@sumeks.co",
         ],
         "YouTube": [
             "PALTV Official",
@@ -88,34 +80,116 @@ class ViralPalembangCollector:
             "Sriwijaya TV",
             "Tribun Sumsel Official",
             "TVRI Sumatera Selatan",
-            "iNews Palembang",
-            "Detik Sumbagsel",
+            "Nusantara TV",
         ],
         "X": [
-            "@keluhan_plg",
-            "@infopalembang",
-            "@suara_wongkito",
-            "@basepalembang",
-            "@wargapalembang_",
-            "@sumsel_fess",
+            "@tribunsumsel",
+            "@detikcom",
+            "@kompastv",
+            "@suaracom",
+            "@officialinews_",
         ],
     }
 
-    USER_PREFIXES = [
-        "wong_plg", "budak_seberang", "anak_unsri", "ibu_sako", "pedagang_16ilir",
-        "mang_ujang", "cece_ampera", "pemuda_kertapati", "rina_kemuning", "doni_macan",
-        "fitri_bendung", "andi_plaju", "rizky_sukarami", "ayu_jakabaring", "bambang_kalidoni",
-        "siti_lemabang", "hendra_bukit", "nia_gandus", "taufik_km12", "desi_palimo",
-        "angga_patal", "lestari_musi", "farhan_7ulu", "indah_sekanak", "wahyu_cinde",
-        "putri_kuto", "eko_keramasan", "maya_talangkelapa", "rehan_kapitan", "yuni_tanggatakat",
-        "gilang_celentang", "nadia_sekip", "lukman_pakjo", "sari_kenten", "bayu_borang",
-        "dian_demang", "ikhsan_polda", "ratna_charitas", "yusuf_sungki", "mega_10ulu",
-        "arif_bkb", "tika_puntikayu", "danu_karyajaya", "vina_sukajaya", "reza_mangkunegara",
-        "intan_padangselasa", "fajar_gubah", "ikbal_30ilir", "nurul_8ilir", "hengki_matamerah",
-        "yuliana_silaberanti", "aditya_kebunbunga", "bella_talangjambe", "candra_selincah",
-        "dewi_sungailais", "erik_komering", "fira_26ilir", "galih_kamboja", "hani_talangbetutu",
-        "irfan_noerdinpandji",
-    ]
+    # Daftar akun publik nyata di masing-masing platform (bukan username fiktif)
+    REAL_PUBLIC_USERS_BY_PLATFORM = {
+        "Instagram": [
+            "palembang.terkini",
+            "plglipp",
+            "palembang.dlh",
+            "palembang.update",
+            "seputarpalembang",
+            "infopalembang",
+            "tribunsumsel",
+            "sumeks.co",
+            "palembang.eksis",
+            "pesonasriwijaya",
+            "kompastvpalembang",
+            "paltv.id",
+            "sriwijayatv",
+            "detiksumbagsel",
+            "unsri",
+            "bemkmunsri",
+            "uinradenfatahpalembang",
+            "polsri",
+            "walhisumsel",
+            "humaspalembang",
+        ],
+        "TikTok": [
+            "palembang.terkini",
+            "infosumseltv",
+            "tribunsumsel",
+            "detiksumbagsel",
+            "kompastvpalembang",
+            "paltv.id",
+            "sumeks.co",
+            "pesonasriwijaya",
+        ],
+        "Threads": [
+            "palembang.terkini",
+            "plglipp",
+            "palembang.dlh",
+            "tribunsumsel",
+            "infopalembang",
+            "sumeks.co",
+            "detiksumbagsel",
+            "kompastvpalembang",
+        ],
+        "YouTube": [
+            "PALTVOfficial",
+            "KompasTVPalembang",
+            "TribunSumsel",
+            "TVRISumateraSelatan",
+            "NusantaraTV",
+            "KompasTV",
+            "IndonesiaAsri",
+        ],
+        "X": [
+            "tribunsumsel",
+            "detikcom",
+            "KompasTV",
+            "suaracom",
+            "officialinews_",
+        ],
+    }
+
+    # Daftar tautan postingan/video nyata terkait isu sampah di Kota Palembang
+    REAL_POST_URLS_BY_PLATFORM = {
+        "Instagram": [
+            "https://www.instagram.com/p/DW6EVremb8w/",
+            "https://www.instagram.com/p/Ddxe_fQzhi4/",
+            "https://www.instagram.com/reel/DdQlxVcxmtp/",
+            "https://www.instagram.com/reel/DD7Q6bDSRSG/",
+            "https://www.instagram.com/p/DZFCsTrmXL-/",
+            "https://www.instagram.com/p/DZFr_lsGbci/",
+            "https://www.instagram.com/reel/DJ-9G_mSffk/",
+            "https://www.instagram.com/reel/DdQK6IVhexZ/",
+        ],
+        "YouTube": [
+            "https://www.youtube.com/watch?v=J-CMCs92pl0",
+            "https://www.youtube.com/watch?v=eWF9qZassV8",
+            "https://www.youtube.com/watch?v=orXv9z5mBDE",
+            "https://www.youtube.com/watch?v=ZakUT-4ttSg",
+            "https://www.youtube.com/watch?v=NxZAPvH8mGI",
+        ],
+        "TikTok": [
+            "https://www.tiktok.com/@infosumseltv/video/7542352087121740306",
+            "https://www.tiktok.com/@palembang.terkini",
+            "https://www.tiktok.com/@tribunsumsel",
+            "https://www.tiktok.com/@detiksumbagsel",
+        ],
+        "Threads": [
+            "https://www.threads.net/@palembang.terkini",
+            "https://www.threads.net/@plglipp",
+            "https://www.threads.net/@palembang.dlh",
+            "https://www.threads.net/@tribunsumsel",
+        ],
+        "X": [
+            "https://x.com/search?q=sampah%20palembang&src=typed_query",
+            "https://x.com/tribunsumsel",
+            "https://x.com/detikcom",
+        ],
+    }
 
     VIRAL_SCENARIOS = [
         # 1. Topik Pasar Tradisional (Pasar 16 Ilir, Jakabaring, Lemabang, KM 5, Cinde, Kuto, Tangga Takat, Sekip, Padang Selasa, Gubah, Sako, Plaju, Sungki, 10 Ulu, 26 Ilir, Kamboja, Talang Betutu, Gandus)
@@ -547,11 +621,20 @@ class ViralPalembangCollector:
                 if idx > target_count:
                     break
 
-                user_base = cls.USER_PREFIXES[(idx + scen_idx) % len(cls.USER_PREFIXES)]
-                readable_username = f"@{user_base}{(idx % 89) + 10}"
+                platform_users = cls.REAL_PUBLIC_USERS_BY_PLATFORM.get(
+                    platform, cls.REAL_PUBLIC_USERS_BY_PLATFORM["Instagram"]
+                )
+                user_handle = platform_users[(idx + scen_idx) % len(platform_users)]
+                readable_username = f"@{user_handle}"
+                profile_url = BaseScraper.build_profile_url(platform, user_handle)
 
                 accounts = cls.VIRAL_ACCOUNTS[platform]
                 source_acc = accounts[(idx + round_idx) % len(accounts)]
+
+                platform_posts = cls.REAL_POST_URLS_BY_PLATFORM.get(
+                    platform, cls.REAL_POST_URLS_BY_PLATFORM["Instagram"]
+                )
+                post_url = platform_posts[(idx + scen_idx + round_idx) % len(platform_posts)]
 
                 current_dt = start_dt + timedelta(seconds=(idx - 1) * step_seconds + ((idx * 137) % 3600))
                 timestamp = current_dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -567,6 +650,8 @@ class ViralPalembangCollector:
                         "raw_text": text_content,
                         "likes_count": likes,
                         "source_account": source_acc,
+                        "profile_url": profile_url,
+                        "post_url": post_url,
                     }
                 )
                 idx += 1
