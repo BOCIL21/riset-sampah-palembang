@@ -25,11 +25,11 @@ C:\laragon\www\riset_sampah_palembang\
 ├── README.md                       # Dokumentasi & Tutorial Lengkap
 ├── config/
 │   ├── settings.py                 # Loader konfigurasi terpusat (.env)
-│   ├── kamus_palembang.json        # Kamus Slang Bahasa Palembang -> Indonesia Baku
-│   └── gazetteer_palembang.json    # Database Koordinat, Pasar, Sungai & Kecamatan di Palembang
+│   ├── kamus_palembang.json        # Kamus Slang Bahasa Palembang (145+ entri) -> Indonesia Baku
+│   └── gazetteer_palembang.json    # Database 144 Titik Lokasi, Pasar, Sungai & 18 Kecamatan di Palembang
 ├── data/
 │   ├── raw/
-│   │   └── sample_keluhan_palembang.csv  # Dataset sampel realistis untuk pengujian
+│   │   └── sample_keluhan_palembang.csv  # Dataset 900 baris dilengkapi profile_url & post_url
 │   ├── processed/
 │   └── outputs/
 │       ├── jurnal_1/               # Output CSV & JSON ringkasan statistik Jurnal 1
@@ -129,8 +129,8 @@ Menjalankan riset ini di **Google Colab** sangat direkomendasikan karena Anda me
    * **Sel #1 (Mount Drive):** Akan muncul pop-up izin akses Google Drive -> klik **Connect to Google Drive** -> pilih akun Google Anda -> klik **Allow**.
    * **Sel #2 (Install Library):** Menginstal `bertopic`, `python-dotenv`, `instaloader`, dan `apify-client` (bebas konflik *protobuf*).
    * **Sel #3 (Konfigurasi AI):** Secara otomatis menyalakan `USE_TRANSFORMERS = 'true'` agar Jurnal 1 menggunakan **IndoBERT** dan **BERTopic**.
-   * **Sel #4 (Eksekusi Pipeline Jurnal 1):** Menjalankan 15 unit test dan memproses **360 dokumen keluhan sampah Palembang**.
-   * **Sel #5 (Tabel Visual):** Menampilkan tabel hasil analisis Jurnal 1 langsung di layar Colab.
+   * **Sel #4 (Eksekusi Pipeline Jurnal 1):** Menjalankan 15 unit test dan memproses **900 dokumen keluhan sampah Palembang**.
+   * **Sel #5 (Tabel Visual):** Menampilkan tabel hasil analisis Jurnal 1 beserta kolom `profile_url` dan `post_url` langsung di layar Colab.
 5. **Cara Mengunduh Hasil Jurnal 1:** Hasil CSV (`hasil_analisis_jurnal1.csv`) dan JSON (`ringkasan_jurnal1.json`) otomatis tersimpan di Google Drive Anda pada folder `riset_sampah_palembang/data/outputs/jurnal_1/`.
 
 ### Tahap 3: Menjalankan Jurnal 2 di Google Colab (NER Lokasi, Skor Urgensi & Peta GIS)
@@ -189,7 +189,7 @@ python main_jurnal1.py
 ```
 
 **Hasil yang didapat untuk Jurnal 1 (`data/outputs/jurnal_1/`):**
-1. `hasil_analisis_jurnal1.csv` — Berisi teks asli, username yang sudah dianonimisasi (`USER_xxxx`), hasil normalisasi Bahasa Palembang, label sentimen (`Negatif`/`Positif`/`Netral`), kategori emosi (`Marah_Kecewa`, `Khawatir_Darurat`, `Harapan_Saran`, `Apresiasi`), serta klaster topik keluhan.
+1. `hasil_analisis_jurnal1.csv` — Berisi teks asli, username publik (`@plglipp`, `@palembang.terkini`, dll.) beserta versi tersamar (`username_masked`), hasil normalisasi Bahasa Palembang, label sentimen (`Negatif`/`Positif`/`Netral`), kategori emosi (`Marah_Kecewa`, `Khawatir_Darurat`, `Harapan_Saran`, `Apresiasi`), klaster topik keluhan, serta tautan langsung **`profile_url`** (link ke akun) dan **`post_url`** (link ke postingan/video).
 2. `ringkasan_jurnal1.json` — Berisi rekapitulasi jumlah distribusi sentimen, distribusi topik, serta nilai **Accuracy, Macro Precision, Macro Recall, Macro F1-Score, dan Cohen's Kappa** yang siap dimasukkan ke dalam Tabel Bab 4 Jurnal 1.
 
 ---
@@ -202,7 +202,7 @@ python main_jurnal2.py
 ```
 
 **Hasil yang didapat untuk Jurnal 2 (`data/outputs/jurnal_2/`):**
-1. `hasil_geospasial_urgensi_jurnal2.csv` — Berisi hasil deteksi lokasi spesifik di Kota Palembang (misal: *Pasar 16 Ilir, Simpang Patal, TPA Sukawinatan, Sungai Bendung*), nama Kecamatan, koordinat (`latitude`, `longitude`), skor urgensi (`0–100`), level urgensi (`TINGGI_KRITIS`, `SEDANG`, `RENDAH`), target SLA penanganan, dan rekomendasi tindakan otomatis untuk DLHK Palembang.
+1. `hasil_geospasial_urgensi_jurnal2.csv` — Berisi hasil deteksi lokasi spesifik di Kota Palembang (144 titik lokasi lintas 18 Kecamatan), nama Kecamatan, koordinat (`latitude`, `longitude`), skor urgensi (`0–100`), level urgensi (`TINGGI_KRITIS`, `SEDANG`, `RENDAH`), target SLA penanganan, rekomendasi tindakan otomatis untuk DLHK Palembang, serta kolom **`profile_url`** dan **`post_url`** di bagian akhir.
 2. `ringkasan_jurnal2.json` — Statistik sebaran keluhan per kecamatan, tipe kawasan (Pasar Tradisional, Sungai/Drainase, TPA, Jalan), dan **Top 3 Prioritas Darurat**.
 3. `peta_hotspot_sampah_palembang.html` — **Peta Interaktif GIS Kota Palembang**. Buka file ini langsung di browser (Chrome/Edge) untuk melihat titik merah/oranye/hijau lokasi keluhan sampah di Palembang beserta *popup* detail rekomendasinya. Peta ini dapat langsung di-*screenshot* sebagai gambar visualisasi spasial pada naskah Jurnal 2.
 
