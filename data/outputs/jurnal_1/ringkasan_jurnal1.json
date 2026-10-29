@@ -1,0 +1,38 @@
+{
+  "judul_jurnal_1": "Analisis Sentimen dan Pemodelan Topik Keluhan Masyarakat Terkait Pengelolaan Sampah di Kota Palembang Menggunakan IndoBERT dan BERTopic",
+  "total_dokumen": 360,
+  "distribusi_tahun": {
+    "2026": 70,
+    "2025": 109,
+    "2024": 92,
+    "2023": 83,
+    "2022": 6
+  },
+  "distribusi_sentimen": {
+    "Netral": 109,
+    "Positif": 71,
+    "Negatif": 180
+  },
+  "distribusi_emosi": {
+    "Harapan_Saran": 109,
+    "Apresiasi": 71,
+    "Marah_Kecewa": 136,
+    "Khawatir_Darurat": 44
+  },
+  "distribusi_topik": {
+    "T2_Sungai_Drainase_Banjir": 92,
+    "T3_Keterlambatan_Angkut_DLHK": 86,
+    "T1_Sampah_Pasar_Tradisional": 71,
+    "T4_Kapasitas_TPS_TPA_Overload": 59,
+    "T5_Perilaku_Warga_Dan_Kebijakan": 52
+  },
+  "metrik_konsistensi": {
+    "total_samples": 360.0,
+    "accuracy": 1.0,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "macro_f1": 1.0,
+    "cohens_kappa": 1.0
+  },
+  "file_output_csv": "C:\\laragon\\www\\riset_sampah_palembang\\data\\outputs\\jurnal_1\\hasil_analisis_jurnal1.csv"
+}

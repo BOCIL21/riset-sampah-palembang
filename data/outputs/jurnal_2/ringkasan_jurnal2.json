@@ -1,0 +1,71 @@
+{
+  "judul_jurnal_2": "Ekstraksi Entitas Lokasi dan Klasifikasi Tingkat Urgensi Keluhan Sampah di Kota Palembang Berbasis Large Language Models (LLM) untuk Mendukung Smart Environment",
+  "total_laporan": 360,
+  "distribusi_tahun": {
+    "2023": 83,
+    "2024": 92,
+    "2025": 109,
+    "2026": 70,
+    "2022": 6
+  },
+  "distribusi_urgensi": {
+    "TINGGI_KRITIS": 143,
+    "SEDANG": 62,
+    "RENDAH": 155
+  },
+  "sebaran_kecamatan": {
+    "Ilir Timur II": 52,
+    "Kertapati": 9,
+    "Ilir Timur I": 35,
+    "Jakabaring": 9,
+    "Sukarami": 75,
+    "Ilir Barat I": 37,
+    "Sako": 16,
+    "Tidak Spesifik": 28,
+    "Seberang Ulu I / Ilir Barat I": 9,
+    "Ilir Barat I / Gandus": 8,
+    "Seberang Ulu I": 8,
+    "Kemuning": 9,
+    "Seberang Ulu II": 9,
+    "Kalidoni": 16,
+    "Alang-Alang Lebar": 16,
+    "Bukit Kecil": 24
+  },
+  "sebaran_tipe_kawasan": {
+    "Sungai / Drainase": 55,
+    "Kawasan Jalan": 9,
+    "Pasar Tradisional": 80,
+    "Kecamatan": 96,
+    "Umum": 28,
+    "Landmark": 9,
+    "Kawasan Wisata / Tepian Sungai": 8,
+    "TPA Utama": 43,
+    "Kawasan Permukiman": 16,
+    "Taman Kota": 16
+  },
+  "top_3_prioritas_darurat": [
+    {
+      "lokasi": "Sungai Bendung",
+      "kecamatan": "Ilir Timur II",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
+      "lokasi": "Sungai Buah",
+      "kecamatan": "Ilir Timur II",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
+      "lokasi": "Simpang Patal",
+      "kecamatan": "Ilir Timur II",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    }
+  ],
+  "file_output_csv": "C:\\laragon\\www\\riset_sampah_palembang\\data\\outputs\\jurnal_2\\hasil_geospasial_urgensi_jurnal2.csv",
+  "file_peta_interaktif_html": "C:\\laragon\\www\\riset_sampah_palembang\\data\\outputs\\jurnal_2\\peta_hotspot_sampah_palembang.html"
+}
