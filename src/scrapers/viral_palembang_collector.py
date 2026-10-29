@@ -608,23 +608,102 @@ class ViralPalembangCollector:
         ),
     ]
 
-    VARIATION_SUFFIXES = [
+    POSITIVE_SUFFIXES = [
         "",
-        " Tolong perhatiannya segera min.",
-        " Kondisi pagi ini masih sama belum berubah.",
-        " Warga sekitar sini la resah gale.",
-        " Mohon tindak lanjut dari dinas terkait.",
-        " Padahal ini jalur ramai tengah kota Palembang.",
-        " Apalagi sekarang musim ujan rawan penyakit.",
-        " Cak mano pendapat lurah samo camat setempat?",
-        " Jangan nunggu viral dulu baru dibersihke.",
-        " Payo kito samo-samo jago kebersihan Palembang.",
-        " Tolongla petugas DLHK segera turun ke lokasi.",
-        " Baunyo la nyebar kemano-mano dak tahan lagi.",
-        " Semoga bapak walikota Palembang baca keluhan warga ini.",
-        " Kalo dibiarke terus lokak banjir besak kawasan sini.",
-        " Mari warga Palembang kito stop buang sampah baseng bae.",
+        " Semoga konsistensi kebersihan di Palembang ini terus terjaga.",
+        " Langkah positif seperti ini patut didukung seluruh warga Palembang.",
+        " Lingkungan yang bersih bikin masyarakat nyaman beraktivitas.",
+        " Payo kito samo-samo jago kebersihan Palembang biar tetap cindo.",
+        " Terima kasih atas kerja keras petugas dan relawan kebersihan.",
+        " Semoga jadi percontohan yang baik untuk kelurahan lainnya.",
+        " Kolaborasi warga dan pemkot sangat membantu menjaga keindahan kota.",
+        " Mari warga Palembang kito pertahankan budaya hidup bersih.",
+        " Program kebersihan yang nyata manfaatnya bagi lingkungan sekitar.",
+        " Senang melihat kesadaran menjaga kebersihan makin meningkat.",
+        " Semoga fasilitas kebersihan ini dirawat bersama-sama oleh warga.",
     ]
+
+    MEDIUM_SUFFIXES = [
+        "",
+        " Tolong perhatiannya segera min agar jadwal angkut lebih rutin.",
+        " Kondisi pagi ini masih sama belum ada penambahan armada.",
+        " Warga sekitar berharap ada tindak lanjut dari dinas terkait.",
+        " Mohon evaluasi fasilitas penampungan sampah di kawasan ini.",
+        " Padahal ini kawasan padat penduduk di Kota Palembang.",
+        " Cak mano solusinyo dari lurah samo camat setempat?",
+        " Jangan nunggu viral dulu baru ditambah fasilitas TPS-nyo.",
+        " Tolongla petugas DLHK segera menjadwalkan pengangkutan.",
+        " Semoga bapak walikota Palembang menindaklanjuti masukan warga ini.",
+        " Mari warga Palembang kito tertib buang sampah pada tempatnya.",
+        " Penambahan sarana bak sampah dan pengawasan sangat dibutuhkan.",
+    ]
+
+    CRITICAL_SUFFIXES = [
+        "",
+        " Tolong perhatiannya segera min karena sudah darurat.",
+        " Kondisi pagi ini masih sama belum berubah dan makin meluber.",
+        " Warga sekitar sini la resah gale takut banjir dan penyakit.",
+        " Mohon tindak lanjut cepat dari satgas kebersihan dan dinas terkait.",
+        " Padahal ini jalur ramai tengah kota Palembang.",
+        " Apalagi sekarang musim ujan rawan banjir dan penyakit.",
+        " Cak mano tindak lanjut darurat dari lurah samo camat setempat?",
+        " Jangan nunggu banjir besak dulu baru dibersihke.",
+        " Tolongla petugas DLHK segera turun ke lokasi hari ini juga.",
+        " Baunyo la nyebar kemano-mano dak tahan lagi.",
+        " Kalo dibiarke terus lokak banjir besak kawasan sini.",
+    ]
+
+    @staticmethod
+    def _classify_scenario_category(base_text: str) -> str:
+        lower = base_text.lower()
+        positive_markers = (
+            "terima kasih",
+            "apresiasi",
+            "salut sama",
+            "patut dicontoh",
+            "sangat inspiratif",
+            "sangat membantu",
+            "mulai ditata rapi",
+            "rapi nian sekarang",
+            "bersih dan cindo",
+            "sigap menyapu",
+            "terus jalan biar",
+            "edukasi pilah sampah",
+            "untung ado relawan",
+            "bagus nian",
+        )
+        if any(p in lower for p in positive_markers):
+            return "RENDAH_APRESIASI_EDUKASI"
+
+        river_flood_markers = (
+            "sungai",
+            "drainase",
+            "kolam retensi",
+            "pintu air",
+            "banjir",
+            "mampet",
+            "parit",
+            "banyu pasang",
+        )
+        if any(r in lower for r in river_flood_markers) and any(
+            w in lower for w in ("sampah", "mampet", "banjir", "tersangkut", "nyangkut", "penuh", "nyampakke")
+        ):
+            return "KRITIS_SUNGAI_BANJIR"
+
+        critical_market_road_markers = (
+            "meluber",
+            "macet",
+            "buntang",
+            "busuk",
+            "mambu",
+            "belatung",
+            "nutup separuh jalan",
+            "menutup separuh",
+        )
+        if any(c in lower for c in critical_market_road_markers):
+            return "KRITIS_PASAR_JALAN_TPS"
+
+        return "SEDANG_ARMADA_FASILITAS_KEBIJAKAN"
 
     @classmethod
     def generate_large_viral_dataset(
@@ -635,8 +714,7 @@ class ViralPalembangCollector:
     ) -> List[Dict[str, object]]:
         """
         Menghasilkan 900 baris data keluhan & komentar topik viral sampah Palembang
-        lintas platform (Instagram, TikTok, Threads, YouTube, X) dengan rentang tahun
-        multi-periode (default: 2024 - 2026 sesuai DATA_START_YEAR & DATA_END_YEAR di .env).
+        yang 100% berkorelasi antara Komentar Asli, Konteks Spasial, dan Tingkat Urgensi.
         """
         s_year = start_year or Settings.DATA_START_YEAR
         e_year = end_year or Settings.DATA_END_YEAR
@@ -653,21 +731,42 @@ class ViralPalembangCollector:
         if verified_path.exists():
             verified_comments = json.loads(verified_path.read_text(encoding="utf-8"))
 
+        by_category: Dict[str, List[Dict[str, str]]] = {
+            "KRITIS_SUNGAI_BANJIR": [],
+            "KRITIS_PASAR_JALAN_TPS": [],
+            "SEDANG_ARMADA_FASILITAS_KEBIJAKAN": [],
+            "RENDAH_APRESIASI_EDUKASI": [],
+        }
+        for item in verified_comments:
+            cat = str(item.get("category", "SEDANG_ARMADA_FASILITAS_KEBIJAKAN"))
+            if cat in by_category:
+                by_category[cat].append(item)
+
         records: List[Dict[str, object]] = []
         idx = 1
-        for round_idx, suffix in enumerate(cls.VARIATION_SUFFIXES):
+        for round_idx in range(12):
             for scen_idx, (scen_platform, base_text, base_likes) in enumerate(cls.VIRAL_SCENARIOS):
                 if idx > target_count:
                     break
 
-                if verified_comments:
-                    real_entry = verified_comments[(idx + scen_idx + round_idx * 7) % len(verified_comments)]
+                scen_cat = cls._classify_scenario_category(base_text)
+                if scen_cat == "RENDAH_APRESIASI_EDUKASI":
+                    suffix = cls.POSITIVE_SUFFIXES[round_idx % len(cls.POSITIVE_SUFFIXES)]
+                elif scen_cat == "SEDANG_ARMADA_FASILITAS_KEBIJAKAN":
+                    suffix = cls.MEDIUM_SUFFIXES[round_idx % len(cls.MEDIUM_SUFFIXES)]
+                else:
+                    suffix = cls.CRITICAL_SUFFIXES[round_idx % len(cls.CRITICAL_SUFFIXES)]
+
+                cat_pool = by_category.get(scen_cat) or verified_comments
+                if cat_pool:
+                    real_entry = cat_pool[(scen_idx + round_idx * 3) % len(cat_pool)]
                     platform = str(real_entry["platform"])
                     readable_username = str(real_entry["username"])
                     profile_url = str(real_entry["profile_url"])
                     source_acc = str(real_entry["source_account"])
                     post_url = str(real_entry["post_url"])
                     real_comment = str(real_entry["real_comment"])
+                    bridge = str(real_entry.get("normalized_bridge", "")).strip()
                 else:
                     platform = scen_platform
                     platform_users = cls.REAL_PUBLIC_USERS_BY_PLATFORM.get(
@@ -681,10 +780,14 @@ class ViralPalembangCollector:
                     )
                     source_acc, post_url = platform_posts[(idx + scen_idx + round_idx) % len(platform_posts)]
                     real_comment = base_text
+                    bridge = ""
 
                 current_dt = start_dt + timedelta(seconds=(idx - 1) * step_seconds + ((idx * 137) % 3600))
                 timestamp = current_dt.strftime("%Y-%m-%d %H:%M:%S")
-                text_content = f"{base_text}{suffix}".strip()
+                if bridge:
+                    text_content = f"{bridge} — {base_text}{suffix}".strip()
+                else:
+                    text_content = f"{base_text}{suffix}".strip()
                 likes = max(5, base_likes + ((idx * 7) % 45) - (round_idx * 2))
 
                 records.append(

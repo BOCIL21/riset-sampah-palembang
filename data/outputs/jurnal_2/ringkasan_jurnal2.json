@@ -7,68 +7,68 @@
     "2026": 261
   },
   "distribusi_urgensi": {
-    "TINGGI_KRITIS": 282,
-    "SEDANG": 244,
-    "RENDAH": 374
+    "TINGGI_KRITIS": 301,
+    "SEDANG": 411,
+    "RENDAH": 188
   },
   "sebaran_kecamatan": {
+    "Ilir Timur I": 72,
     "Ilir Timur II": 84,
+    "Kemuning": 36,
+    "Ilir Barat I": 84,
     "Kertapati": 36,
     "Seberang Ulu I": 48,
-    "Ilir Timur I": 72,
     "Kalidoni": 72,
-    "Sako": 24,
-    "Ilir Barat I": 84,
-    "Seberang Ulu I / Ilir Barat I": 12,
     "Sako / Sematang Borang": 12,
-    "Kemuning": 36,
     "Jakabaring": 36,
-    "Sukarami": 108,
-    "Kertapati / Seberang Ulu I": 12,
-    "Ilir Barat I / Gandus": 12,
-    "Plaju": 12,
     "Bukit Kecil": 72,
-    "Alang-Alang Lebar": 60,
+    "Seberang Ulu I / Ilir Barat I": 12,
+    "Ilir Barat I / Gandus": 12,
+    "Kertapati / Seberang Ulu I": 12,
+    "Sukarami": 108,
     "Seberang Ulu II": 12,
+    "Plaju": 12,
+    "Sako": 24,
+    "Alang-Alang Lebar": 60,
     "Alang-Alang Lebar / Sukarami": 12,
     "Ilir Timur II / Seberang Ulu II": 12,
-    "Tidak Spesifik": 24,
-    "Ilir Timur III": 24,
+    "Gandus": 12,
     "Ilir Barat II": 12,
-    "Gandus": 12
+    "Ilir Timur III": 24,
+    "Tidak Spesifik": 24
   },
   "sebaran_tipe_kawasan": {
+    "Pasar Tradisional": 240,
     "Sungai / Drainase": 144,
     "Kecamatan": 96,
-    "Pasar Tradisional": 240,
     "Kawasan Jalan": 96,
     "Landmark": 24,
-    "Kawasan Wisata / Tepian Sungai": 36,
     "Sungai / Perairan": 12,
     "TPA Utama": 60,
     "Kawasan Permukiman": 120,
     "Taman Kota": 36,
-    "Kawasan Fasilitas Umum": 12,
-    "Umum": 24
+    "Kawasan Wisata / Tepian Sungai": 36,
+    "Umum": 24,
+    "Kawasan Fasilitas Umum": 12
   },
   "top_3_prioritas_darurat": [
     {
-      "lokasi": "Sungai Bendung",
+      "lokasi": "Pasar 16 Ilir",
+      "kecamatan": "Ilir Timur I",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
+      "lokasi": "Pasar Lemabang",
       "kecamatan": "Ilir Timur II",
       "skor_urgensi": 100,
       "level": "TINGGI_KRITIS",
       "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
     },
     {
-      "lokasi": "Kertapati",
-      "kecamatan": "Kertapati",
-      "skor_urgensi": 100,
-      "level": "TINGGI_KRITIS",
-      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
-    },
-    {
-      "lokasi": "Sungai Buah",
-      "kecamatan": "Ilir Timur II",
+      "lokasi": "Pasar Sekip Ujung",
+      "kecamatan": "Kemuning",
       "skor_urgensi": 100,
       "level": "TINGGI_KRITIS",
       "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
@@ -76,37 +76,37 @@
   ],
   "top_5_prioritas_darurat": [
     {
+      "lokasi": "Pasar 16 Ilir",
+      "kecamatan": "Ilir Timur I",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
+      "lokasi": "Pasar Lemabang",
+      "kecamatan": "Ilir Timur II",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
+      "lokasi": "Pasar Sekip Ujung",
+      "kecamatan": "Kemuning",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
+      "lokasi": "Pasar Padang Selasa",
+      "kecamatan": "Ilir Barat I",
+      "skor_urgensi": 100,
+      "level": "TINGGI_KRITIS",
+      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
+    },
+    {
       "lokasi": "Sungai Bendung",
       "kecamatan": "Ilir Timur II",
       "skor_urgensi": 100,
-      "level": "TINGGI_KRITIS",
-      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
-    },
-    {
-      "lokasi": "Kertapati",
-      "kecamatan": "Kertapati",
-      "skor_urgensi": 100,
-      "level": "TINGGI_KRITIS",
-      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
-    },
-    {
-      "lokasi": "Sungai Buah",
-      "kecamatan": "Ilir Timur II",
-      "skor_urgensi": 100,
-      "level": "TINGGI_KRITIS",
-      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
-    },
-    {
-      "lokasi": "Sungai Aur",
-      "kecamatan": "Seberang Ulu I",
-      "skor_urgensi": 97,
-      "level": "TINGGI_KRITIS",
-      "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
-    },
-    {
-      "lokasi": "Pasar 16 Ilir",
-      "kecamatan": "Ilir Timur I",
-      "skor_urgensi": 96,
       "level": "TINGGI_KRITIS",
       "rekomendasi": "Kirim Satgas Kebersihan & Dinas PUPR/PSDA untuk pembersihan sumbatan drainase/sungai atau tumpukan yang menutup jalan utama."
     }

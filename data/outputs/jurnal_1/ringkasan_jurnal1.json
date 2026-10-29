@@ -7,22 +7,22 @@
     "2026": 261
   },
   "distribusi_sentimen": {
-    "Negatif": 388,
-    "Netral": 259,
-    "Positif": 253
+    "Negatif": 417,
+    "Netral": 236,
+    "Positif": 247
   },
   "distribusi_emosi": {
-    "Marah_Kecewa": 263,
-    "Khawatir_Darurat": 125,
-    "Harapan_Saran": 259,
-    "Apresiasi": 253
+    "Marah_Kecewa": 169,
+    "Khawatir_Darurat": 248,
+    "Harapan_Saran": 236,
+    "Apresiasi": 247
   },
   "distribusi_topik": {
-    "T1_Sampah_Pasar_Tradisional": 242,
-    "T3_Keterlambatan_Angkut_DLHK": 241,
-    "T2_Sungai_Drainase_Banjir": 210,
-    "T5_Perilaku_Warga_Dan_Kebijakan": 117,
-    "T4_Kapasitas_TPS_TPA_Overload": 90
+    "T3_Keterlambatan_Angkut_DLHK": 255,
+    "T2_Sungai_Drainase_Banjir": 223,
+    "T5_Perilaku_Warga_Dan_Kebijakan": 191,
+    "T1_Sampah_Pasar_Tradisional": 154,
+    "T4_Kapasitas_TPS_TPA_Overload": 77
   },
   "metrik_konsistensi": {
     "total_samples": 900.0,
