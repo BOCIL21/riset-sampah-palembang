@@ -767,6 +767,7 @@ class ViralPalembangCollector:
                     post_url = str(real_entry["post_url"])
                     real_comment = str(real_entry["real_comment"])
                     bridge = str(real_entry.get("normalized_bridge", "")).strip()
+                    real_ts = str(real_entry.get("timestamp", "")).strip()
                 else:
                     platform = scen_platform
                     platform_users = cls.REAL_PUBLIC_USERS_BY_PLATFORM.get(
@@ -781,9 +782,13 @@ class ViralPalembangCollector:
                     source_acc, post_url = platform_posts[(idx + scen_idx + round_idx) % len(platform_posts)]
                     real_comment = base_text
                     bridge = ""
+                    real_ts = ""
 
-                current_dt = start_dt + timedelta(seconds=(idx - 1) * step_seconds + ((idx * 137) % 3600))
-                timestamp = current_dt.strftime("%Y-%m-%d %H:%M:%S")
+                if real_ts:
+                    timestamp = real_ts
+                else:
+                    current_dt = start_dt + timedelta(seconds=(idx - 1) * step_seconds + ((idx * 137) % 3600))
+                    timestamp = current_dt.strftime("%Y-%m-%d %H:%M:%S")
                 if bridge:
                     text_content = f"{bridge} — {base_text}{suffix}".strip()
                 else:

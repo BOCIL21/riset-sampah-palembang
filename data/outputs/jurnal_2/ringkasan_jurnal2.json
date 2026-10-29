@@ -2,9 +2,14 @@
   "judul_jurnal_2": "Ekstraksi Entitas Lokasi dan Klasifikasi Tingkat Urgensi Keluhan Sampah di Kota Palembang Berbasis Large Language Models (LLM) untuk Mendukung Smart Environment",
   "total_laporan": 900,
   "distribusi_tahun": {
-    "2024": 318,
-    "2025": 321,
-    "2026": 261
+    "2025": 287,
+    "2021": 17,
+    "2026": 426,
+    "2023": 51,
+    "2017": 33,
+    "2019": 18,
+    "2020": 52,
+    "2022": 16
   },
   "distribusi_urgensi": {
     "TINGGI_KRITIS": 301,

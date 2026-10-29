@@ -2,9 +2,14 @@
   "judul_jurnal_1": "Analisis Sentimen dan Pemodelan Topik Keluhan Masyarakat Terkait Pengelolaan Sampah di Kota Palembang Menggunakan IndoBERT dan BERTopic",
   "total_dokumen": 900,
   "distribusi_tahun": {
-    "2024": 318,
-    "2025": 321,
-    "2026": 261
+    "2025": 287,
+    "2026": 426,
+    "2021": 17,
+    "2020": 52,
+    "2017": 33,
+    "2023": 51,
+    "2019": 18,
+    "2022": 16
   },
   "distribusi_sentimen": {
     "Negatif": 417,

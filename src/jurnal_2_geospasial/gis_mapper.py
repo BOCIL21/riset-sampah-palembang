@@ -82,7 +82,7 @@ class GISMapperJurnal2:
     <div class="palembang-map-wrapper">
         <div id="palembang-header">
             <h2>Peta Spasial & Tingkat Urgensi Keluhan Sampah Kota Palembang (Jurnal 2)</h2>
-            <span>Total Titik Laporan: {len(records)} (2022–2026)</span>
+            <span>Total Titik Laporan: {len(records)} (2017–2026)</span>
         </div>
         <div id="palembang-map"></div>
     </div>
