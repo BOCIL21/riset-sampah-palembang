@@ -17,20 +17,63 @@ class SentimentAnalyzerJurnal1:
     FINETUNED_INDOBERT_MODEL = "mdhugol/indonesia-bert-sentiment-classification"
 
     NEGATIVE_KEYWORDS = [
-        "numpuk", "menumpuk", "bau", "busuk", "mambu", "parah", "lambat",
-        "macet", "banjir", "mampet", "lalat", "overload", "buntang", "sedih",
-        "kecewa", "bahaya", "sembarangan", "meluber", "darurat", "tidak ada",
-        "kumuh", "resah", "menggunung", "bingung", "tersangkut", "berserakan",
+        "numpuk",
+        "menumpuk",
+        "bau",
+        "busuk",
+        "mambu",
+        "parah",
+        "lambat",
+        "macet",
+        "banjir",
+        "mampet",
+        "lalat",
+        "overload",
+        "buntang",
+        "sedih",
+        "kecewa",
+        "bahaya",
+        "sembarangan",
+        "meluber",
+        "darurat",
+        "tidak ada",
+        "kumuh",
+        "resah",
+        "menggunung",
+        "bingung",
+        "tersangkut",
+        "berserakan",
     ]
     POSITIVE_KEYWORDS = [
-        "apresiasi", "rapi", "bersih", "terima kasih", "bagus", "salut", "gercep", "untung",
+        "apresiasi",
+        "rapi",
+        "bersih",
+        "terima kasih",
+        "bagus",
+        "salut",
+        "gercep",
+        "untung",
     ]
     SUGGESTION_KEYWORDS = [
-        "semoga", "perlu", "saran", "harapan", "sanksi", "solusi", "program",
-        "edukasi", "setuju", "butuh",
+        "semoga",
+        "perlu",
+        "saran",
+        "harapan",
+        "sanksi",
+        "solusi",
+        "program",
+        "edukasi",
+        "setuju",
+        "butuh",
     ]
     EMERGENCY_KEYWORDS = [
-        "banjir", "darurat", "bahaya", "pintu air", "mampet total", "penyakit", "meluap",
+        "banjir",
+        "darurat",
+        "bahaya",
+        "pintu air",
+        "mampet total",
+        "penyakit",
+        "meluap",
     ]
 
     def __init__(self, llm_client: Optional[LLMClient] = None) -> None:
@@ -88,7 +131,9 @@ class SentimentAnalyzerJurnal1:
             else:
                 res = dict(base)
             res["baseline_sentiment"] = base["sentiment"]
-            res["emotion"] = self.derive_aligned_emotion(str(res.get("sentiment", "Netral")), text)
+            res["emotion"] = self.derive_aligned_emotion(
+                str(res.get("sentiment", "Netral")), text
+            )
             results.append(res)
 
         return results
@@ -135,7 +180,9 @@ class SentimentAnalyzerJurnal1:
                     device=device_id,
                 )
 
-            preds = self._hf_pipeline(texts, batch_size=32, truncation=True, max_length=256)
+            preds = self._hf_pipeline(
+                texts, batch_size=32, truncation=True, max_length=256
+            )
             label_map = {
                 "label_0": "Positif",
                 "positive": "Positif",
